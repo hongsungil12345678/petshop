@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>회원 정보</title>
+</head>
+<body>
+  <h1>회원 정보</h1>
+  <p>사용자 이름: <span th:text="${member.username}"></span></p>
+  <p>이메일: <span th:text="${member.email}"></span></p>
+
+  <a th:href="@{/members/{id}/edit(id=${member.id})}">회원 정보 수정</a><br>
+  <form th:action="@{/members/{id}/delete(id=${member.id})}" method="post" style="display:inline;">
+  <button type="submit">회원 탈퇴</button>
+  </form>
+  <p><a th:href="@{/}">메인 페이지로 가기</a></p>
+</body>
+</html>
