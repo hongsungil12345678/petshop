@@ -1,4 +1,52 @@
+# PetShop1018
+
+## 프로젝트 개요
+PetShop1018은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양한 반려동물 용품을 탐색하고, 장바구니에 담고, 주문하고, 결제할 수 있습니다. 
+이 프로젝트는 반려동물 용품의 원활한 쇼핑 경험을 제공하기 위해 설계되었습니다.
+
+## 주요 기능
+- **회원 관리**: 사용자 등록, 로그인, 프로필 관리 기능을 제공합니다.
+- **상품 브라우징**: 카테고리별로 상품을 탐색하고 검색할 수 있습니다.
+- **상품 상세 보기**: 선택한 상품의 상세 정보를 확인할 수 있습니다.
+- **장바구니**: 관심 있는 상품을 장바구니에 추가하고 관리할 수 있습니다.
+- **주문 및 결제**: 주문을 완료하고 다양한 결제 방법을 통해 결제할 수 있습니다.
+- **리뷰 및 평점**: 상품에 대한 리뷰와 평점을 남길 수 있습니다.
+- **위시리스트**: 관심 있는 상품을 위시리스트에 추가하여 나중에 다시 확인할 수 있습니다.
+
+## 기술 스택
+
+- **백엔드**
+  - Java (version 17),Spring Boot (version 3.3.4)
+  - Spring Data JPA
+  - Spring Security
+  - OAuth2 Client 2.0
+  - Spring Validation
+  - Thymeleaf
+- **데이터베이스**
+  - H2 Database
+- **프론트엔드**
+  - HTML, CSS, JavaScript
+  - Thymeleaf Extras Spring Security6
+- **JSON 처리**
+  - Jackson Databind
+  - Jackson Core
+- **기타 라이브러리**
+  - Lombok
+- **결제**
+  - 포트원 API
+
+## 설치 및 실행 방법
+1. 저장소 클론
+   ```sh
+   git clone https://github.com/hongsungil12345678/petshop1018.git
+
+
+
 # PetShop 프로젝트 코드 순서도 및 유저 플로우
+## 1. 프로젝트 개요
+
+
+
 
 ## 1. 유저 플로우 (User Flow)
 
