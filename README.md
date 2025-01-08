@@ -213,51 +213,6 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
 6. **리소스 핸들링**
    - `WebConfig`에서 정적 리소스 경로를 설정하고, `LoginUserArgumentResolver`를 추가하여 세션에서 사용자 정보를 가져옵니다.
 
-### 주요 구성 요소
-
-- **config 패키지**:
-  - 보안 설정과 관련된 클래스를 포함하고 있습니다.
-  - `SecurityConfig`: 전체 보안 설정을 관리합니다.
-  - `CustomAuthenticationProvider`: 사용자 인증을 커스터마이징하기 위한 클래스.
-  - `CustomLoginSuccessHandler`: 로그인 성공 시 처리를 담당합니다.
-  - `CustomLoginFailureHandler`: 로그인 실패 시 처리를 담당합니다.
-
-- **controller 패키지**:
-  - 웹 요청을 처리하는 컨트롤러 클래스를 포함하고 있습니다.
-  - `CartController`: 장바구니 관련 요청을 처리합니다.
-  - `MemberController`: 회원 관리 관련 요청을 처리합니다.
-  - `OrderController`: 주문 관련 요청을 처리합니다.
-  - `ProductController`: 상품 관련 요청을 처리합니다.
-
-- **domain 패키지**:
-  - 데이터베이스 엔티티 클래스를 포함하고 있습니다.
-  - `Member`: 회원 정보를 저장합니다.
-  - `Order`: 주문 정보를 저장합니다.
-  - `Product`: 상품 정보를 저장합니다.
-  - `CartItem`: 장바구니 아이템 정보를 저장합니다.
-
-- **dto 패키지**:
-  - 데이터 전송 객체를 포함하고 있습니다.
-  - `LoginDto`: 로그인 요청 데이터를 담습니다.
-  - `MemberDto`: 회원 정보를 담습니다.
-  - `ProductDto`: 상품 정보를 담습니다.
-
-- **repository 패키지**:
-  - 데이터베이스와 상호작용하는 리포지토리를 포함하고 있습니다.
-  - `MemberRepository`: 회원 정보를 조회 및 관리합니다.
-  - `OrderRepository`: 주문 정보를 조회 및 관리합니다.
-  - `ProductRepository`: 상품 정보를 조회 및 관리합니다.
-
-- **service 패키지**:
-  - 비즈니스 로직을 처리하는 서비스를 포함하고 있습니다.
-  - `MemberService`: 회원 관련 비즈니스 로직을 처리합니다.
-  - `OrderService`: 주문 관련 비즈니스 로직을 처리합니다.
-  - `ProductService`: 상품 관련 비즈니스 로직을 처리합니다.
-
-- **validator 패키지**:
-  - 유효성 검사를 처리하는 클래스를 포함하고 있습니다.
-  - `AbstractValidator`: 공통 유효성 검사 로직을 처리합니다.
-  - `CustomValidators`: 다양한 커스텀 유효성 검사 로직을 포함합니다.
 
 
 
