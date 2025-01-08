@@ -1,7 +1,7 @@
-# PetShop1018
+# Petshop
 
 ## 프로젝트 개요
-PetShop1018은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양한 반려동물 용품을 탐색하고, 장바구니에 담고, 주문하고, 결제할 수 있습니다. 
+Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양한 반려동물 용품을 탐색하고, 장바구니에 담고, 주문하고, 결제할 수 있습니다. 
 이 프로젝트는 반려동물 용품의 원활한 쇼핑 경험을 제공하기 위해 설계되었습니다.
 
 ## 주요 기능
@@ -39,6 +39,156 @@ PetShop1018은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 �
 1. 저장소 클론
    ```sh
    git clone https://github.com/hongsungil12345678/petshop1018.git
+
+## 프로젝트 구조
+프로젝트의 주요 디렉토리와 파일 구조입니다
+└─ java
+   └─ main
+      └─ com
+         └─ petshop1018
+            └─ sungil
+               │  SungilApplication.class
+               │
+               ├─ config
+               │  ├─ CustomAuthenticationProvider.class
+               │  ├─ CustomLoginFailureHandler.class
+               │  ├─ CustomLoginSuccessHandler.class
+               │  ├─ CustomUserDetails.class
+               │  ├─ CustomUserDetailsService.class
+               │  ├─ LoginUser.class
+               │  ├─ LoginUserArgumentResolver.class
+               │  ├─ SecurityConfig.class
+               │  └─ WebConfig.class
+               │
+               ├─ controller
+               │  ├─ CartController.class
+               │  ├─ MemberController.class
+               │  ├─ OrderController.class
+               │  └─ ProductController.class
+               │
+               ├─ domain
+               │  ├─ Address.class
+               │  ├─ BaseTimeEntity.class
+               │  ├─ Cart.class
+               │  ├─ CartItem.class
+               │  ├─ Category.class
+               │  ├─ CategoryInitialize.class
+               │  ├─ Member.class
+               │  ├─ Order.class
+               │  ├─ OrderItem.class
+               │  ├─ OrderStatus.class
+               │  ├─ Payment.class
+               │  ├─ PaymentMethod.class
+               │  ├─ PaymentStatus.class
+               │  ├─ Product.class
+               │  ├─ ProductCategory.class
+               │  ├─ ProductInitializer.class
+               │  ├─ Review.class
+               │  ├─ Role.class
+               │  ├─ Wishlist.class
+               │  └─ WishlistItem.class
+               │
+               ├─ dto
+               │  ├─ AddCartItemDto.class
+               │  ├─ AddProductDto.class
+               │  ├─ CategoryDto.class
+               │  ├─ CheckoutForm.class
+               │  ├─ LoginDto.class
+               │  ├─ MemberDto.class
+               │  ├─ OrderItemDto.class
+               │  ├─ ProductDto.class
+               │  ├─ ReviewDto.class
+               │  └─ UpdateMemberDto.class
+               │
+               ├─ oauth
+               │  ├─ CustomOAuth2AuthenticationSuccessHandler.class
+               │  ├─ CustomOAuth2UserService.class
+               │  └─ OAuthAttributes.class
+               │
+               ├─ repository
+               │  ├─ AddressRepository.class
+               │  ├─ CartItemRepository.class
+               │  ├─ CartRepository.class
+               │  ├─ CategoryRepository.class
+               │  ├─ MemberRepository.class
+               │  ├─ OrderItemRepository.class
+               │  ├─ OrderRepository.class
+               │  ├─ PaymentRepository.class
+               │  ├─ ProductCategoryRepository.class
+               │  ├─ ProductRepository.class
+               │  ├─ ReviewRepository.class
+               │  ├─ WishlistItemRepository.class
+               │  └─ WishlistRepository.class
+               │
+               ├─ service
+               │  ├─ AddressService.class
+               │  ├─ CartItemService.class
+               │  ├─ CartService.class
+               │  ├─ CategoryService.class
+               │  ├─ FileService.class
+               │  ├─ MemberService.class
+               │  ├─ OrderItemService.class
+               │  ├─ OrderService.class
+               │  ├─ ProductService.class
+               │  ├─ ReviewService.class
+               │  ├─ WishListItemService.class
+               │  └─ WishListService.class
+               │
+               └─ validator
+                  ├─ AbstractValidator.class
+                  ├─ CustomValidators.class
+                  │  ├─ CheckoutFormValidator.class
+                  │  ├─ EmailValidator.class
+                  │  ├─ NicknameValidator.class
+                  │  └─ UsernameValidator.class
+
+### 주요 구성 요소
+
+- **config 패키지**:
+  - 보안 설정과 관련된 클래스를 포함하고 있습니다.
+  - `SecurityConfig`: 전체 보안 설정을 관리합니다.
+  - `CustomAuthenticationProvider`: 사용자 인증을 커스터마이징하기 위한 클래스.
+  - `CustomLoginSuccessHandler`: 로그인 성공 시 처리를 담당합니다.
+  - `CustomLoginFailureHandler`: 로그인 실패 시 처리를 담당합니다.
+
+- **controller 패키지**:
+  - 웹 요청을 처리하는 컨트롤러 클래스를 포함하고 있습니다.
+  - `CartController`: 장바구니 관련 요청을 처리합니다.
+  - `MemberController`: 회원 관리 관련 요청을 처리합니다.
+  - `OrderController`: 주문 관련 요청을 처리합니다.
+  - `ProductController`: 상품 관련 요청을 처리합니다.
+
+- **domain 패키지**:
+  - 데이터베이스 엔티티 클래스를 포함하고 있습니다.
+  - `Member`: 회원 정보를 저장합니다.
+  - `Order`: 주문 정보를 저장합니다.
+  - `Product`: 상품 정보를 저장합니다.
+  - `CartItem`: 장바구니 아이템 정보를 저장합니다.
+
+- **dto 패키지**:
+  - 데이터 전송 객체를 포함하고 있습니다.
+  - `LoginDto`: 로그인 요청 데이터를 담습니다.
+  - `MemberDto`: 회원 정보를 담습니다.
+  - `ProductDto`: 상품 정보를 담습니다.
+
+- **repository 패키지**:
+  - 데이터베이스와 상호작용하는 리포지토리를 포함하고 있습니다.
+  - `MemberRepository`: 회원 정보를 조회 및 관리합니다.
+  - `OrderRepository`: 주문 정보를 조회 및 관리합니다.
+  - `ProductRepository`: 상품 정보를 조회 및 관리합니다.
+
+- **service 패키지**:
+  - 비즈니스 로직을 처리하는 서비스를 포함하고 있습니다.
+  - `MemberService`: 회원 관련 비즈니스 로직을 처리합니다.
+  - `OrderService`: 주문 관련 비즈니스 로직을 처리합니다.
+  - `ProductService`: 상품 관련 비즈니스 로직을 처리합니다.
+
+- **validator 패키지**:
+  - 유효성 검사를 처리하는 클래스를 포함하고 있습니다.
+  - `AbstractValidator`: 공통 유효성 검사 로직을 처리합니다.
+  - `CustomValidators`: 다양한 커스텀 유효성 검사 로직을 포함합니다.
+
+이런 방식으로 작성하면 중요한 부분을 강조하면서도 전체 구조를 명확히 전달할 수 있어. 추가적으로 궁금한 사항이나 더 필요한 정보가 있으면 언제든지 말해줘! 😊📚
 
 
 
