@@ -41,9 +41,8 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
    git clone https://github.com/hongsungil12345678/petshop1018.git
 
 ## 프로젝트 구조
-프로젝트의 주요 디렉토리와 파일 구조입니다
-
-└─ java
+ - **프로젝트의 주요 디렉토리와 파일 구조입니다**:
+ - └─ java
    └─ main
       └─ com
          └─ petshop1018
@@ -142,6 +141,9 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
                   │  ├─ EmailValidator.class
                   │  ├─ NicknameValidator.class
                   │  └─ UsernameValidator.class
+   
+
+
 
 ### 주요 구성 요소
 
