@@ -144,7 +144,74 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
 
    
 
+## 보안 설정
 
+### 주요 클래스 및 역할
+
+1. **CustomAuthenticationProvider**
+   - **역할**: 사용자 인증을 처리하는 커스텀 인증 프로바이더.
+   - **주요 메서드**:
+     - `authenticate`: 사용자 이름과 비밀번호를 검증. 성공 시 `UsernamePasswordAuthenticationToken`을 반환.
+     - `supports`: 지원하는 인증 객체 타입을 지정.
+
+2. **CustomLoginFailureHandler**
+   - **역할**: 로그인 실패 시 처리하는 핸들러.
+   - **주요 메서드**:
+     - `onAuthenticationFailure`: 다양한 인증 예외 상황에 맞는 에러 메시지를 설정하고, 실패 시 특정 URL로 리다이렉트.
+
+3. **CustomLoginSuccessHandler**
+   - **역할**: 로그인 성공 시 처리하는 핸들러.
+   - **주요 메서드**:
+     - `onAuthenticationSuccess`: 로그인한 사용자 정보를 세션에 저장하고, 성공 후 특정 URL로 리다이렉트.
+
+4. **CustomUserDetails**
+   - **역할**: Spring Security의 `UserDetails` 인터페이스를 구현하여 사용자 세부 정보를 캡슐화.
+   - **주요 필드 및 메서드**:
+     - `getPassword`, `getUsername`, `getAuthorities` 등.
+
+5. **CustomUserDetailsService**
+   - **역할**: 사용자 정보를 데이터베이스에서 조회하여 `UserDetails` 형태로 반환.
+   - **주요 메서드**:
+     - `loadUserByUsername`: 사용자 이름을 기반으로 사용자 정보를 조회.
+
+6. **LoginUser**
+   - **역할**: 세션 관련 중복 코드를 제거하기 위한 어노테이션.
+
+7. **LoginUserArgumentResolver**
+   - **역할**: `@LoginUser` 어노테이션이 붙은 파라미터를 처리하는 리졸버.
+   - **주요 메서드**:
+     - `supportsParameter`: `@LoginUser` 어노테이션과 파라미터 타입을 확인.
+     - `resolveArgument`: 세션에서 사용자 정보를 가져옴.
+
+8. **SecurityConfig**
+   - **역할**: 보안 설정을 관리하는 클래스.
+   - **주요 설정**:
+     - CSRF 설정, 권한 설정, 로그인/로그아웃 설정, OAuth2 로그인 설정 등.
+
+9. **WebConfig**
+   - **역할**: Spring MVC에서 정적 리소스를 처리하고, `LoginUserArgumentResolver`를 추가하는 설정 클래스.
+
+### 전체 동작 흐름
+
+1. **사용자 요청**
+   - 사용자가 로그인 페이지에서 사용자 이름과 비밀번호를 입력하고 로그인 요청을 보냅니다.
+
+2. **CustomAuthenticationProvider**
+   - `authenticate` 메서드를 통해 사용자 이름과 비밀번호를 검증합니다.
+   - 사용자 정보가 일치하면 `UsernamePasswordAuthenticationToken`을 반환하여 인증을 완료합니다.
+
+3. **인증 성공**
+   - `CustomLoginSuccessHandler`가 호출되어 로그인한 사용자 정보를 세션에 저장하고, 성공 후 특정 URL로 리다이렉트합니다.
+
+4. **인증 실패**
+   - `CustomLoginFailureHandler`가 호출되어 실패 이유에 따라 적절한 에러 메시지를 설정하고, 실패 후 특정 URL로 리다이렉트합니다.
+
+5. **CSRF 설정 및 OAuth2 로그인**
+   - `SecurityConfig`에서 CSRF 보호와 OAuth2 로그인 설정을 관리합니다.
+   - OAuth2 로그인 성공 시 `CustomOAuth2AuthenticationSuccessHandler`가 호출됩니다.
+
+6. **리소스 핸들링**
+   - `WebConfig`에서 정적 리소스 경로를 설정하고, `LoginUserArgumentResolver`를 추가하여 세션에서 사용자 정보를 가져옵니다.
 
 ### 주요 구성 요소
 
