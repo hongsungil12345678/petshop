@@ -41,7 +41,7 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
 
 ## 프로젝트 구조
  - **프로젝트의 주요 디렉토리와 파일 구조입니다**:
- - ```
+ -  ```
  └─ java
    └─ main
       └─ com
@@ -140,8 +140,8 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
                   │  ├─ CheckoutFormValidator.class
                   │  ├─ EmailValidator.class
                   │  ├─ NicknameValidator.class
-                  │  └─ UsernameValidator.class
-   ```
+                  │  └─ UsernameValidator.class 
+                  ```
 
 ##  ERD
 - ERD는 다음과 같습니다
