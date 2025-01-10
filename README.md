@@ -889,3 +889,61 @@ PetShop 프로젝트에서 Spring Security와 OAuth2.0 인증이 어떻게 동�
 ---
 
 ### **이 설명은 프로젝트 코드를 분석한 결과를 바탕으로 작성되었으며, 추가적인 질문이나 세부 구현 논의가 필요하다면 언제든 요청해주세요! 😊**
+이제 주어진 클래스들에 대해 각각의 동작 순서를 설명하겠습니다. 기본적으로 이 클래스들은 Spring Security와 관련된 인증 및 사용자 관리 흐름에 관련된 부분입니다. 아래는 각 클래스들이 동작하는 순서를 보여주는 흐름도입니다:
+
+```
+[MemberController] 
+   |
+   v
+[DTO 생성] (회원 가입, 로그인 등의 요청을 DTO로 변환)
+   |
+   v
+[SecurityConfig] (Spring Security 설정: 인증, 권한 설정)
+   |
+   v
+[CustomAuthenticationProvider] (인증 제공자, 사용자 인증 처리)
+   |
+   v
+[CustomUserDetailsService] (사용자 정보 로드, DB에서 사용자 정보 조회)
+   |
+   v
+[CustomUserDetails] (사용자 정보를 담고 있는 객체)
+   |
+   v
+[LoginUser] (로그인 시 사용자 정보를 담는 객체)
+   |
+   v
+[LoginUserArgumentResolver] (컨트롤러 메서드에서 로그인 사용자 정보 자동 주입)
+   |
+   v
+[CustomLoginSuccessHandler] (로그인 성공 시 후속 처리)
+   |
+   v
+[CustomLoginFailureHandler] (로그인 실패 시 후속 처리)
+   |
+   v
+[WebConfig] (웹 관련 설정, 인터셉터 등록 및 설정)
+```
+
+### 각 클래스의 역할:
+1. **MemberController**: 클라이언트의 요청을 받는 컨트롤러로, 회원가입, 로그인 등의 요청을 처리합니다. 요청을 DTO로 변환 후 서비스로 전달합니다.
+2. **DTO 생성**: Controller에서 받은 요청을 DTO로 변환하여 서비스로 전달하는 역할을 합니다. DTO는 클라이언트와의 데이터 교환을 위한 객체입니다.
+3. **SecurityConfig**: Spring Security 설정을 담당합니다. 인증 및 권한 관련 설정을 포함하며, 애플리케이션의 보안을 설정하는 역할을 합니다.
+4. **CustomAuthenticationProvider**: 사용자 인증을 담당하는 클래스입니다. 로그인 시 사용자 정보를 인증하고, 인증이 성공하면 `Authentication` 객체를 반환합니다.
+5. **CustomUserDetailsService**: 사용자의 상세 정보를 DB에서 조회하여 `UserDetails` 객체를 반환하는 서비스입니다. `CustomAuthenticationProvider`에서 사용됩니다.
+6. **CustomUserDetails**: Spring Security의 `UserDetails` 인터페이스를 구현하는 클래스입니다. 사용자 정보를 담고 있으며, `CustomUserDetailsService`에서 생성됩니다.
+7. **LoginUser**: 로그인한 사용자 정보를 담고 있는 객체로, 주로 로그인 성공 시 사용됩니다.
+8. **LoginUserArgumentResolver**: `@LoginUser` 어노테이션을 사용하여 컨트롤러 메서드에서 로그인된 사용자 정보를 자동으로 주입해주는 역할을 합니다.
+9. **CustomLoginSuccessHandler**: 로그인 성공 후 수행할 동작을 처리하는 클래스입니다. 예를 들어, 로그인 성공 시 리디렉션을 설정하거나 추가적인 후속 작업을 처리합니다.
+10. **CustomLoginFailureHandler**: 로그인 실패 후 처리하는 클래스입니다. 실패한 이유를 처리하거나 에러 메시지를 반환하는 등의 역할을 합니다.
+11. **WebConfig**: 웹 관련 설정을 담당합니다. 인터셉터나 필터, 기타 웹 컴포넌트를 설정할 수 있습니다.
+
+### 동작 순서 (로그인 과정):
+1. **SecurityConfig**가 설정된 후 Spring Security가 초기화됩니다.
+2. 사용자가 로그인 요청을 보내면, **CustomAuthenticationProvider**가 인증 처리를 담당합니다.
+3. **CustomAuthenticationProvider**는 **CustomUserDetailsService**를 사용해 DB에서 사용자 정보를 조회하고, **CustomUserDetails**를 반환합니다.
+4. 로그인 성공 시, **CustomLoginSuccessHandler**가 호출되어 후속 처리(리디렉션 등)가 이루어집니다.
+5. 로그인 실패 시, **CustomLoginFailureHandler**가 호출되어 실패 처리가 이루어집니다.
+6. **LoginUserArgumentResolver**는 로그인한 사용자 정보를 컨트롤러 메서드에 주입합니다.
+
+이러한 흐름을 통해 Spring Security에서 사용자 인증 및 후속 처리가 이루어집니다.
