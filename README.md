@@ -947,3 +947,447 @@ PetShop 프로젝트에서 Spring Security와 OAuth2.0 인증이 어떻게 동�
 6. **LoginUserArgumentResolver**는 로그인한 사용자 정보를 컨트롤러 메서드에 주입합니다.
 
 이러한 흐름을 통해 Spring Security에서 사용자 인증 및 후속 처리가 이루어집니다.
+
+
+
+
+
+확인했습니다! 주신 내용을 바탕으로 자연스럽게 다시 작성해드릴게요. 중요한 정보가 잘 전달되도록 하고, 가독성을 높이도록 하겠습니다.
+
+---
+
+# Petshop 프로젝트 README
+
+## 프로젝트 개요
+Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양한 반려동물 용품을 탐색하고, 장바구니에 담고, 주문하고, 결제할 수 있습니다. 이 프로젝트는 반려동물 용품의 원활한 쇼핑 경험을 제공하기 위해 설계되었습니다.
+
+## 주요 기능
+- **회원 관리**: 사용자 등록, 로그인, 프로필 관리 기능을 제공합니다.
+- **상품 브라우징**: 카테고리별로 상품을 탐색하고 검색할 수 있습니다.
+- **상품 상세 보기**: 선택한 상품의 상세 정보를 확인할 수 있습니다.
+- **장바구니**: 관심 있는 상품을 장바구니에 추가하고 관리할 수 있습니다.
+- **주문 및 결제**: 주문을 완료하고 다양한 결제 방법을 통해 결제할 수 있습니다.
+- **리뷰 및 평점**: 상품에 대한 리뷰와 평점을 남길 수 있습니다.
+- **위시리스트**: 관심 있는 상품을 위시리스트에 추가하여 나중에 다시 확인할 수 있습니다.
+
+## 기술 스택
+- **백엔드**
+  - Java (version 17), Spring Boot (version 3.3.4)
+  - Spring Data JPA
+  - Spring Security
+  - OAuth2 Client 2.0
+  - Spring Validation
+  - Thymeleaf
+- **데이터베이스**
+  - H2 Database
+- **프론트엔드**
+  - HTML, CSS, JavaScript
+  - Thymeleaf Extras Spring Security6
+- **JSON 처리**
+  - Jackson Databind
+  - Jackson Core
+- **기타 라이브러리**
+  - Lombok
+- **결제**
+  - 포트원 API
+
+## 설치 및 실행 방법
+1. 저장소 클론
+   ```sh
+   git clone https://github.com/hongsungil12345678/petshop1018.git
+   ```
+
+## 프로젝트 구조
+```plaintext
+ └─ java
+   └─ main
+      └─ com
+         └─ petshop1018
+            └─ sungil
+               │  SungilApplication.class
+               │
+               ├─ config
+               │  ├─ CustomAuthenticationProvider.class
+               │  ├─ CustomLoginFailureHandler.class
+               │  ├─ CustomLoginSuccessHandler.class
+               │  ├─ CustomUserDetails.class
+               │  ├─ CustomUserDetailsService.class
+               │  ├─ LoginUser.class
+               │  ├─ LoginUserArgumentResolver.class
+               │  ├─ SecurityConfig.class
+               │  └─ WebConfig.class
+               │
+               ├─ controller
+               │  ├─ CartController.class
+               │  ├─ MemberController.class
+               │  ├─ OrderController.class
+               │  └─ ProductController.class
+               │
+               ├─ domain
+               │  ├─ Address.class
+               │  ├─ BaseTimeEntity.class
+               │  ├─ Cart.class
+               │  ├─ CartItem.class
+               │  ├─ Category.class
+               │  ├─ CategoryInitialize.class
+               │  ├─ Member.class
+               │  ├─ Order.class
+               │  ├─ OrderItem.class
+               │  ├─ OrderStatus.class
+               │  ├─ Payment.class
+               │  ├─ PaymentMethod.class
+               │  ├─ PaymentStatus.class
+               │  ├─ Product.class
+               │  ├─ ProductCategory.class
+               │  ├─ ProductInitializer.class
+               │  ├─ Review.class
+               │  ├─ Role.class
+               │  ├─ Wishlist.class
+               │  └─ WishlistItem.class
+               │
+               ├─ dto
+               │  ├─ AddCartItemDto.class
+               │  ├─ AddProductDto.class
+               │  ├─ CategoryDto.class
+               │  ├─ CheckoutForm.class
+               │  ├─ LoginDto.class
+               │  ├─ MemberDto.class
+               │  ├─ OrderItemDto.class
+               │  ├─ ProductDto.class
+               │  ├─ ReviewDto.class
+               │  └─ UpdateMemberDto.class
+               │
+               ├─ oauth
+               │  ├─ CustomOAuth2AuthenticationSuccessHandler.class
+               │  ├─ CustomOAuth2UserService.class
+               │  └─ OAuthAttributes.class
+               │
+               ├─ repository
+               │  ├─ AddressRepository.class
+               │  ├─ CartItemRepository.class
+               │  ├─ CartRepository.class
+               │  ├─ CategoryRepository.class
+               │  ├─ MemberRepository.class
+               │  ├─ OrderItemRepository.class
+               │  ├─ OrderRepository.class
+               │  ├─ PaymentRepository.class
+               │  ├─ ProductCategoryRepository.class
+               │  ├─ ProductRepository.class
+               │  ├─ ReviewRepository.class
+               │  ├─ WishlistItemRepository.class
+               │  └─ WishlistRepository.class
+               │
+               ├─ service
+               │  ├─ AddressService.class
+               │  ├─ CartItemService.class
+               │  ├─ CartService.class
+               │  ├─ CategoryService.class
+               │  ├─ FileService.class
+               │  ├─ MemberService.class
+               │  ├─ OrderItemService.class
+               │  ├─ OrderService.class
+               │  ├─ ProductService.class
+               │  ├─ ReviewService.class
+               │  ├─ WishListItemService.class
+               │  └─ WishListService.class
+               │
+               └─ validator
+                  ├─ AbstractValidator.class
+                  ├─ CustomValidators.class
+                  │  ├─ CheckoutFormValidator.class
+                  │  ├─ EmailValidator.class
+                  │  ├─ NicknameValidator.class
+                  │  └─ UsernameValidator.class
+```
+
+계속해서 마지막 부분을 자연스럽게 마무리하겠습니다.
+
+---
+
+## 보안 설정
+
+### 주요 클래스 및 역할
+
+1. **CustomAuthenticationProvider**
+   - **역할**: 사용자 인증을 처리하는 커스텀 인증 프로바이더.
+   - **주요 메서드**:
+     - `authenticate`: 사용자 이름과 비밀번호를 검증. 성공 시 `UsernamePasswordAuthenticationToken`을 반환.
+     - `supports`: 지원하는 인증 객체 타입을 지정.
+
+2. **CustomLoginFailureHandler**
+   - **역할**: 로그인 실패 시 처리하는 핸들러.
+   - **주요 메서드**:
+     - `onAuthenticationFailure`: 다양한 인증 예외 상황에 맞는 에러 메시지를 설정하고, 실패 시 특정 URL로 리다이렉트.
+
+3. **CustomLoginSuccessHandler**
+   - **역할**: 로그인 성공 시 처리하는 핸들러.
+   - **주요 메서드**:
+     - `onAuthenticationSuccess`: 로그인한 사용자 정보를 세션에 저장하고, 성공 후 특정 URL로 리다이렉트.
+
+4. **CustomUserDetails**
+   - **역할**: Spring Security의 `UserDetails` 인터페이스를 구현하여 사용자 세부 정보를 캡슐화.
+   - **주요 필드 및 메서드**:
+     - `getPassword`, `getUsername`, `getAuthorities` 등.
+
+5. **CustomUserDetailsService**
+   - **역할**: 사용자 정보를 데이터베이스에서 조회하여 `UserDetails` 형태로 반환.
+   - **주요 메서드**:
+     - `loadUserByUsername`: 사용자 이름을 기반으로 사용자 정보를 조회.
+
+6. **LoginUser**
+   - **역할**: 세션 관련 중복 코드를 제거하기 위한 어노테이션.
+
+7. **LoginUserArgumentResolver**
+   - **역할**: `@LoginUser` 어노테이션이 붙은 파라미터를 처리하는 리졸버.
+   - **주요 메서드**:
+     - `supportsParameter`: `@LoginUser` 어노테이션과 파라미터 타입을 확인.
+     - `resolveArgument`: 세션에서 사용자 정보를 가져옴.
+
+8. **SecurityConfig**
+   - **역할**: 보안 설정을 관리하는 클래스.
+   - **주요 설정**:
+     - CSRF 설정, 권한 설정, 로그인/로그아웃 설정, OAuth2 로그인 설정 등.
+
+9. **WebConfig**
+   - **역할**: Spring MVC에서 정적 리소스를 처리하고, `LoginUserArgumentResolver`를 추가하는 설정 클래스.
+
+### 전체 동작 흐름
+
+1. **사용자 요청**
+   - 사용자가 로그인 페이지에서 사용자 이름과 비밀번호를 입력하고 로그인 요청을 보냅니다.
+
+2. **CustomAuthenticationProvider**
+   - `authenticate` 메서드를 통해 사용자 이름과 비밀번호를 검증합니다.
+   - 사용자 정보가 일치하면 `UsernamePasswordAuthenticationToken`을 반환하여 인증을 완료합니다.
+
+3. **인증 성공**
+   - `CustomLoginSuccessHandler`가 호출되어 로그인한 사용자 정보를 세션에 저장하고, 성공 후 특정 URL로 리다이렉트합니다.
+
+4. **인증 실패**
+   - `CustomLoginFailureHandler`가 호출되어 실패 이유에 따라 적절한 에러 메시지를 설정하고, 실패 후 특정 URL로 리다이렉트합니다.
+
+5. **CSRF 설정 및 OAuth2 로그인**
+   - `SecurityConfig`에서 CSRF 보호와 OAuth2 로그인 설정을 관리합니다.
+   - OAuth2 로그인 성공 시 `CustomOAuth2AuthenticationSuccessHandler`가 호출됩니다.
+
+6. **리소스 핸들링**
+   - `WebConfig`에서 정적 리소스 경로를 설정하고, `LoginUserArgumentResolver`를 추가하여 세션에서 사용자 정보를 가져옵니다.
+
+---
+
+## PetShop 프로젝트 코드 순서도 및 유저 플로우
+
+### 1. 유저 플로우 (User Flow)
+
+#### 1.1 회원가입 및 로그인
+
+**회원가입 (Sign Up)**
+
+1. **유저가 회원가입 페이지에 접근**
+   - `/register` URL 호출.
+2. **유저 입력 데이터를 폼 제출**
+   - `MemberController.register()`가 요청 처리.
+3. **데이터 검증 및 저장**
+   - `MemberService.saveMember()`에서 비밀번호 암호화 및 DB 저장.
+   - `MemberRepository.save()`로 DB에 저장.
+
+**로그인 (Login)**
+
+1. **유저가 로그인 페이지에 접근**
+   - `/login` URL 호출.
+2. **Spring Security 인증 처리**
+   - `CustomAuthenticationProvider`가 사용자 인증.
+3. **결과 처리**
+   - 성공 시: `CustomLoginSuccessHandler`가 홈 페이지로 리다이렉트.
+   - 실패 시: `CustomLoginFailureHandler`가 에러 메시지 표시.
+
+---
+
+#### 1.2 상품 조회 및 장바구니 관리
+
+**상품 조회 (View Products)**
+
+1. **유저가 상품 리스트 페이지에 접근**
+   - `/products` URL 호출.
+2. **상품 데이터 조회**
+   - `ProductController.getProducts()`가 요청 처리.
+   - `ProductService.getAllProducts()`를 통해 상품 리스트 가져옴.
+   - 결과를 View에 전달하여 출력.
+
+**장바구니 추가 (Add to Cart)**
+
+1. **유저가 상품을 장바구니에 추가**
+   - `/cart/add` URL 호출.
+2. **장바구니 로직 처리**
+   - `CartController.addToCart()`에서 요청 처리.
+   - `CartItemService.addCartItem()`이 장바구니에 상품 추가.
+   - 중복 상품이면 수량 업데이트, 아니면 새 상품 추가.
+
+---
+
+#### 1.3 주문 생성 및 결제
+
+**주문 생성 (Create Order)**
+
+1. **유저가 장바구니 페이지에서 "주문하기" 클릭**
+   - `/checkout` URL 호출.
+2. **주문 생성 로직 처리**
+   - `OrderController.placeOrder()`가 요청 처리.
+   - `OrderService.createOrder()`에서 주문 엔티티 생성 및 저장.
+   - `OrderRepository.save()`로 DB에 저장.
+
+**결제 (Payment)**
+
+1. **결제 정보 입력 및 처리**
+   - `PaymentService.processPayment()`가 요청 처리.
+   - 성공 시 주문 상태를 `COMPLETED`로 업데이트.
+
+---
+
+### 2. 코드 순서도
+
+
+
+### **2.2 로그인 요청 처리 (Security 관련 내용 포함)**
+
+```plaintext
+[Spring Security Filter]  // Spring Security 필터 체인
+   |
+   v
+[CustomAuthenticationProvider]  // 사용자 인증을 처리하는 커스텀 인증 프로바이더
+   |
+   v
+[CustomUserDetailsService]  // 사용자 정보를 데이터베이스에서 조회하는 서비스
+   |
+   v
+[CustomUserDetails]  // 사용자 세부 정보를 캡슐화한 클래스
+   |
+   v
+[CustomLoginSuccessHandler]  // 로그인 성공 시 후속 처리 핸들러 (성공 시 리다이렉션)
+   |
+   v
+[CustomLoginFailureHandler]  // 로그인 실패 시 후속 처리 핸들러 (실패 시 에러 메시지)
+```
+
+이제 각 클래스의 역할이 주석으로 추가되어 더 명확하게 이해할 수 있습니다. 추가로 필요한 부분이 있으면 언제든지 알려주세요! 😊
+#### 2.1 회원가입 요청 처리
+
+```plaintext
+[MemberController.register()]
+   |
+   v
+[DTO 생성 및 유효성 검사]
+   |
+   v
+[MemberService.saveMember()]
+   |
+   v
+[비밀번호 암호화]
+   |
+   v
+[MemberRepository.save()]
+   |
+   v
+[회원가입 완료 → View 리턴]
+```
+
+#### 2.2 로그인 요청 처리
+
+```plaintext
+[Spring Security Filter]
+   |
+   v
+[CustomAuthenticationProvider.authenticate()]
+   |
+   v
+[CustomLoginSuccessHandler (성공 시 리다이렉션)]
+   |
+   v
+[CustomLoginFailureHandler (실패 시 에러 메시지)]
+```
+
+#### 2.3 상품 조회 및 장바구니 추가
+
+**상품 조회**
+
+```plaintext
+[ProductController.getProducts()]
+   |
+   v
+[ProductService.getAllProducts()]
+   |
+   v
+[ProductRepository.findAll()]
+   |
+   v
+[상품 데이터 View에 전달]
+```
+
+**장바구니 추가**
+
+```plaintext
+[CartController.addToCart()]
+   |
+   v
+[CartItemService.addCartItem()]
+   |
+   v
+[CartItemRepository.save()]
+   |
+   v
+[장바구니 데이터 View에 갱신]
+```
+
+---
+
+#### 2.4 주문 생성 및 결제 처리
+
+**주문 생성**
+
+```plaintext
+[OrderController.placeOrder()]
+   |
+   v
+[OrderService.createOrder()]
+   |
+   v
+[OrderRepository.save()]
+   |
+   v
+[주문 완료 → View 리턴]
+```
+
+**결제 처리**
+
+```plaintext
+[PaymentService.processPayment()]
+   |
+   v
+[결제 성공 → Order 상태 업데이트]
+   |
+   v
+[결제 완료 → View 리턴]
+```
+
+---
+
+## 3. 추가 고려 사항
+
+1. **보안(Security)**
+   - Spring Security를 기반으로 세션 및 OAuth2 인증 처리.
+   - 사용자 권한(`ROLE_USER`, `ROLE_ADMIN`, `ROLE_SOCIAL`)에 따른 접근 제한.
+
+2. **데이터 유효성 검증**
+   - DTO 계층에서 입력 데이터 검증.
+   - 잘못된 입력은 예외를 발생시켜 적절히 처리.
+
+3. **서비스 분리**
+   - 컨트롤러 → 서비스 → 레포지토리 계층으로 비즈니스 로직과 데이터 접근을 분리.
+
+4. **결제 처리**
+   - 결제 관련 로직은 별도의 `PaymentService`에서 관리.
+
+---
+
+이제 README 파일이 훨씬 자연스럽고 읽기 쉽게 되었습니다. 😊 필요한 부분이 있다면 언제든지 알려주세요!
+
