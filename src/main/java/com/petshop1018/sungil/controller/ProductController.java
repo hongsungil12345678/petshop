@@ -66,8 +66,7 @@ public class ProductController {
     public String addFile(@LoginUser MemberDto.Response dto, AddProductDto addProductDto, @RequestParam("imgFile") MultipartFile imgFile, Model model) throws Exception {
         Set<Long> resultCategoryIds = addProductDto.getCategoryIds();
         productService.createProduct(addProductDto, resultCategoryIds, imgFile);
-//        model.addAttribute("memberDto", dto);
-//        log.info("ParentCategory Id : "+addProductDto.getParentCategoryId());
+
         return "redirect:/index";
     }
 
@@ -77,15 +76,8 @@ public class ProductController {
         Product product = productService.getProductById(productId);
         // 상품 카테고리 조회
         Set<Category> productCategories = productService.getProductCategories(productId);
-
-        // 로그인 여부에 따라 Cart, Wishlist 버튼
-        // 로그인된 사용자가 있으면 isLoggedIn을 true로 설정 -> 타임리프 sec 사용
-        //boolean isLoggedIn = (dto != null);
-        //log.info("PRODUCT CONTROLLER - IS LOGGED IN  : "+isLoggedIn);
-        //model.addAttribute("isLoggedIn", isLoggedIn);
         model.addAttribute("product", product);
 
-//        model.addAttribute("memberDto",dto);
         model.addAttribute("productCategories", productCategories);
         if(dto!=null){
             Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
@@ -96,62 +88,33 @@ public class ProductController {
 
         return "shop/single-product";
     }
-// tags로 변경
-    @GetMapping("/shop/category/{categoryName}")
-    public String getProductByCategory(@PathVariable String categoryName,
-                                       @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "9") int size, Model model){
-        //boolean isLoggedIn = (dto != null);
-//        log.info("CATEGORY TAG : {}",categoryName);
-        Page<Product> productsByCategory = productService.getProductsByCategory(categoryName, page, size);
-//        for(Product product:productsByCategory){
-//            log.info("CategoryTag RESULT : {}",product.getTitle());
-//        }
-        //model.addAttribute("isLoggedIn",isLoggedIn);
-        Page<ProductDto> productDtoPage = productsByCategory.map(ProductDto::fromEntity);
-        model.addAttribute("products",productDtoPage);// html 페이지 재사용
-        model.addAttribute("categoryTag",categoryName);
-        model.addAttribute("currentPage", page);  // 현재 페이지
-        model.addAttribute("totalPages", productDtoPage.getTotalPages());  // 전체 페이지 수
-//        if(dto!=null){
-//            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
-//            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
-//            model.addAttribute("cart",cart);
-//            model.addAttribute("cartItems",cartItems);
-//        }
+    @GetMapping("/shop/{categoryType}/{categoryKey}")
+    public String filterProducts(
+            @PathVariable String categoryType,
+            @PathVariable String categoryKey,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size,
+            Model model) {
 
-        return "shop/shop-category";
+        Page<Product> products;
+        if ("category".equals(categoryType)) {
+            products = productService.getProductsByCategory(categoryKey, page, size);
+        } else if ("tag".equals(categoryType)) {
+            products = productService.getProductsByCategoryTags(categoryKey, page, size);
+        } else {
+            products = productService.getProducts(page, size);
+        }
 
-    }
-
-    @GetMapping("/shop/tag/{categoryTag}")
-    public String getProductByTag(@PathVariable String categoryTag,
-                                  @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "9") int size, Model model){
-        //boolean isLoggedIn = (dto != null);
-//        log.info("CATEGORY TAG : {}",categoryTag);
-//        List<Product> productsByCategory = productService.getProductsByCategoryTags(categoryTag);
-//        for(Product product:productsByCategory){
-//            log.info("CategoryTag RESULT : {}",product.getTitle());
-//        }
-
-        Page<Product> products = productService.getProductsByCategoryTags(categoryTag, page, size);
-        //model.addAttribute("isLoggedIn",isLoggedIn);
         Page<ProductDto> productDtoPage = products.map(ProductDto::fromEntity);
-        model.addAttribute("products",productDtoPage);// html 페이지 재사용
-        model.addAttribute("categoryTag",categoryTag);
-        model.addAttribute("currentPage", page);  // 현재 페이지
-        model.addAttribute("totalPages", productDtoPage.getTotalPages());  // 전체 페이지 수
-//        if(dto!=null){
-//            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
-//            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
-//            model.addAttribute("cart",cart);
-//            model.addAttribute("cartItems",cartItems);
-//        }
+        model.addAttribute("products", productDtoPage);
+        model.addAttribute("categoryKey", categoryKey);
+        model.addAttribute("categoryType", categoryType);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productDtoPage.getTotalPages());
 
         return "shop/shop-category";
-
     }
+
 
     @PostMapping("/cart/add/{productId}")
     public String addCart(@LoginUser MemberDto.Response dto, @PathVariable Long productId,
@@ -183,13 +146,6 @@ public class ProductController {
         List<WishlistItem> wishlistItemList = wishListService.getMemberWishlistItem(wishlist);
         model.addAttribute("wishlist",wishlist);
         model.addAttribute("wishlistItemList",wishlistItemList);
-//        if(dto!=null){
-//            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
-//            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
-//            model.addAttribute("cart",cart);
-//            model.addAttribute("cartItems",cartItems);
-//        }
-
         return "shop/wish-list";
     }
 
@@ -227,39 +183,25 @@ public class ProductController {
         Member member = memberService.findMemberById(dto.getId());
         List<WishlistItem> wishlistItemList = wishListService.getWishlistItems(member);
         model.addAttribute("wishlistItemList",wishlistItemList);
-//        if(dto!=null){
-//            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
-//            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
-//            model.addAttribute("cart",cart);
-//            model.addAttribute("cartItems",cartItems);
-//        }
         return "shop/wish-list";
     }
 
     // 가격 필터링
     @GetMapping("/shop/filter")
-    public String filterProductsByPrice(@LoginUser MemberDto.Response dto,
+    public String filterProductsByPrice(
             @RequestParam("minPrice") double minPrice,
-            @RequestParam("maxPrice") double maxPrice,
-            Model model) {
-//        boolean isLoggedIn = (dto != null);
-//        log.info("SHOP CONTROLLER - IS LOGGED IN  : "+isLoggedIn);
-//        model.addAttribute("isLoggedIn",isLoggedIn);
-        List<Product> filteredProducts = productService.filterProductsByPrice(minPrice, maxPrice);
-//        for(Product p:filteredProducts){
-//            log.info("PRODUCT PRICE FILTERING : {}",p);
-//            log.info("PRODUCT PRICE : {}",p.getPrice());
-//        }
-        model.addAttribute("categoryTag","shop");
-        model.addAttribute("products", filteredProducts);
-//        if(dto!=null){
-//            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
-//            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
-//            model.addAttribute("cart",cart);
-//            model.addAttribute("cartItems",cartItems);
-//        }
+            @RequestParam("maxPrice") double maxPrice, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "9") int size, Model model) {
 
-        return "shop/shop-category";
+        Page<Product> filteredProducts = productService.filterProductsByPrice(minPrice, maxPrice, page, size);
+        Page<ProductDto> productDtoPage = filteredProducts.map(ProductDto::fromEntity);
+        model.addAttribute("categoryTag","shop");
+        model.addAttribute("products", productDtoPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productDtoPage.getTotalPages());
+        model.addAttribute("minPrice", minPrice); // 추가
+        model.addAttribute("maxPrice", maxPrice); // 추가
+
+        return "shop/shop-filter";
     }
     @PostMapping("/shop/addReview")
     public String addReview(@LoginUser MemberDto.Response dto,@ModelAttribute ReviewDto reviewDto, RedirectAttributes redirectAttributes) {
@@ -291,3 +233,189 @@ public class ProductController {
     }
 }
 
+
+
+//    @GetMapping({"/shop/{categoryType}/{categoryKey}"})
+//    public String filterProducts(
+//            @PathVariable(required = false) String categoryType,
+//            @PathVariable(required = false) String categoryKey,
+//            @RequestParam(required = false) Double minPrice,
+//            @RequestParam(required = false) Double maxPrice,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "9") int size,
+//            Model model) {
+//
+//        Page<Product> products;
+//
+//        // 1. 상품 필터링 조건 처리
+//        if (minPrice != null && maxPrice != null) {
+//            // 가격 필터링
+//            products = productService.filterProductsByPrice(minPrice, maxPrice, page, size);
+//            categoryType = "filter"; // 가격 필터링 요청임을 나타내는 키 설정
+//            categoryKey = "price-range"; // 예를 들어, 특정 가격 범위 표시용 키
+//        } else if ("category".equals(categoryType)) {
+//            // 카테고리 필터링
+//            products = productService.getProductsByCategory(categoryKey, page, size);
+//        } else if ("tag".equals(categoryType)) {
+//            // 태그 필터링
+//            products = productService.getProductsByCategoryTags(categoryKey, page, size);
+//        } else {
+//            // 기본 값 (모든 상품 조회)
+//            products = productService.getProducts(page, size);
+//            categoryType = "all";
+//            categoryKey = "all";
+//        }
+//
+//        // 2. DTO로 변환
+//        Page<ProductDto> productDtoPage = products.map(ProductDto::fromEntity);
+//
+//        // 3. 모델에 데이터 추가
+//        model.addAttribute("products", productDtoPage);
+//        model.addAttribute("categoryKey", categoryKey);
+//        model.addAttribute("categoryType", categoryType);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", productDtoPage.getTotalPages());
+//
+//        return "shop/shop-category"; // 해당 뷰 이름
+//    }
+
+//    @GetMapping("/shop/category/{categoryName}")
+//    public String filterByCategory(
+//            @PathVariable String categoryName,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "9") int size,
+//            Model model) {
+//        Page<Product> products = productService.getProductsByCategory(categoryName, page, size);
+//        return populateModelAndReturn("category", categoryName, products, page, model);
+//    }
+//
+//    @GetMapping("/shop/tag/{categoryTag}")
+//    public String filterByTag(
+//            @PathVariable String categoryTag,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "9") int size,
+//            Model model) {
+//        Page<Product> products = productService.getProductsByCategoryTags(categoryTag, page, size);
+//        return populateModelAndReturn("tag", categoryTag, products, page, model);
+//    }
+//
+//    @GetMapping("/shop/filter")
+//    public String filterByPrice(
+//            @RequestParam Double minPrice,
+//            @RequestParam Double maxPrice,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "9") int size,
+//            Model model) {
+//        Page<Product> products = productService.filterProductsByPrice(minPrice, maxPrice, page, size);
+//        return populateModelAndReturn("filter", "filter", products, page, model);
+//    }
+//
+//    private String populateModelAndReturn(
+//            String keyType,
+//            String keyValue,
+//            Page<Product> products,
+//            int page,
+//            Model model) {
+//        Page<ProductDto> productDtoPage = products.map(ProductDto::fromEntity);
+//        model.addAttribute("products", productDtoPage);
+//        model.addAttribute("categoryKey", keyValue);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", productDtoPage.getTotalPages());
+//        return "shop/shop-category";
+//    }
+//    // getMapping( categoryName), (categoryTag) , (filter )  3개 합쳐서 중복 코드 제거, 템플릿 재활용
+//    @GetMapping({"/shop/category/{categoryName}", "/shop/tag/{categoryTag}", "/shop/filter"})
+//    public String filterProducts(
+//            @PathVariable(required = false) String categoryName,
+//            @PathVariable(required = false) String categoryTag,
+//            @RequestParam(required = false) Double minPrice,
+//            @RequestParam(required = false) Double maxPrice,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "9") int size,
+//            Model model) {
+//
+//        // 1. 필터링 키 확인
+//        String categoryKey = categoryName != null ? categoryName : categoryTag;
+//
+//        // 2. 상품 검색 및 필터링
+//        Page<Product> products;
+//        if (minPrice != null && maxPrice != null) {
+//            // 가격 필터링 로직
+//            products = productService.filterProductsByPrice(minPrice, maxPrice, page, size);
+//            categoryKey = "filter"; // 필터링 요청임을 나타내는 키
+//        } else if (categoryName != null) {
+//            // 카테고리 필터링
+//            products = productService.getProductsByCategory(categoryName, page, size);
+//        } else if (categoryTag != null) {
+//            // 태그 필터링
+//            products = productService.getProductsByCategoryTags(categoryTag, page, size);
+//        } else {
+//            // 기본 값 (예: 모든 상품)
+//            products = productService.getProducts(page, size);
+//        }
+//
+//        // 3. DTO로 변환하여 모델에 추가
+//        Page<ProductDto> productDtoPage = products.map(ProductDto::fromEntity);
+//        model.addAttribute("products", productDtoPage);
+//        model.addAttribute("categoryKey", categoryKey);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", productDtoPage.getTotalPages());
+//
+//        return "shop/shop-category";
+//    }
+//// tags로 변경
+//    @GetMapping("/shop/category/{categoryName}")
+//    public String getProductByCategory(@PathVariable String categoryName,
+//                                       @RequestParam(defaultValue = "0") int page,
+//                                       @RequestParam(defaultValue = "9") int size, Model model){
+//        //boolean isLoggedIn = (dto != null);
+////        log.info("CATEGORY TAG : {}",categoryName);
+//        Page<Product> productsByCategory = productService.getProductsByCategory(categoryName, page, size);
+////        for(Product product:productsByCategory){
+////            log.info("CategoryTag RESULT : {}",product.getTitle());
+////        }
+//        //model.addAttribute("isLoggedIn",isLoggedIn);
+//        Page<ProductDto> productDtoPage = productsByCategory.map(ProductDto::fromEntity);
+//        model.addAttribute("products",productDtoPage);// html 페이지 재사용
+//        model.addAttribute("categoryTag",categoryName);
+//        model.addAttribute("currentPage", page);  // 현재 페이지
+//        model.addAttribute("totalPages", productDtoPage.getTotalPages());  // 전체 페이지 수
+////        if(dto!=null){
+////            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
+////            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
+////            model.addAttribute("cart",cart);
+////            model.addAttribute("cartItems",cartItems);
+////        }
+//
+//        return "shop/shop-category";
+//
+//    }
+//
+//    @GetMapping("/shop/tag/{categoryTag}")
+//    public String getProductByTag(@PathVariable String categoryTag,
+//                                  @RequestParam(defaultValue = "0") int page,
+//                                  @RequestParam(defaultValue = "9") int size, Model model){
+//        //boolean isLoggedIn = (dto != null);
+////        log.info("CATEGORY TAG : {}",categoryTag);
+////        List<Product> productsByCategory = productService.getProductsByCategoryTags(categoryTag);
+////        for(Product product:productsByCategory){
+////            log.info("CategoryTag RESULT : {}",product.getTitle());
+////        }
+//
+//        Page<Product> products = productService.getProductsByCategoryTags(categoryTag, page, size);
+//        //model.addAttribute("isLoggedIn",isLoggedIn);
+//        Page<ProductDto> productDtoPage = products.map(ProductDto::fromEntity);
+//        model.addAttribute("products",productDtoPage);// html 페이지 재사용
+//        model.addAttribute("categoryTag",categoryTag);
+//        model.addAttribute("currentPage", page);  // 현재 페이지
+//        model.addAttribute("totalPages", productDtoPage.getTotalPages());  // 전체 페이지 수
+////        if(dto!=null){
+////            Cart cart = cartService.getCartByMember(memberService.findMemberById(dto.getId()));
+////            List<CartItem> cartItems = cartService.getMemberCartItem(cart);
+////            model.addAttribute("cart",cart);
+////            model.addAttribute("cartItems",cartItems);
+////        }
+//
+//        return "shop/shop-category";
+//
+//    }

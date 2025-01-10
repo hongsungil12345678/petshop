@@ -278,6 +278,31 @@ public class MemberController {
         return "members/order-list";
     }
 
+    @GetMapping("/index/about")
+    public String getAbout(@LoginUser MemberDto.Response dto,Model model){
+        return "/shop/about";
+    }
+    @GetMapping("/index/blog")
+    public String getBlog(@LoginUser MemberDto.Response dto,Model model){
+        return "/shop/blog";
+
+    }
+    @GetMapping("/index/single-post")
+    public String getSinglePost(@LoginUser MemberDto.Response dto,Model model){
+        return "/shop/single-post";
+    }
+    @GetMapping("/index/faq")
+    public String getFaq(@LoginUser MemberDto.Response dto,Model model){
+        return "/shop/faqs";
+    }
+    @GetMapping("/index/error")
+    public String getError(@LoginUser MemberDto.Response dto,Model model){
+        return "/shop/error";
+    }
+    @GetMapping("/index/contact")
+    public String getContact(@LoginUser MemberDto.Response dto,Model model){
+        return "/shop/contact";
+    }
 }
 
 

@@ -31,10 +31,11 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
      * */
     @Query("SELECT p FROM Product p JOIN ProductCategory pc ON p.id = pc.product.id JOIN Category c ON pc.category.id = c.id WHERE c.tags = :categoryTag")
     List<Product> findByCategoryTags(@Param("categoryTag")String categoryTag);
-
+// 페이징 추가
+//    @Query("SELECT p FROM Product p WHERE p.price BETWEEN :minPrice AND :maxPrice")
+//    List<Product> findProductsByPriceRange(@Param("minPrice")double minPrice,@Param("maxPrice")double maxPrice);
     @Query("SELECT p FROM Product p WHERE p.price BETWEEN :minPrice AND :maxPrice")
-    List<Product> findProductsByPriceRange(@Param("minPrice")double minPrice,@Param("maxPrice")double maxPrice);
-
+    Page<Product> findProductsByPriceRange(@Param("minPrice") double minPrice, @Param("maxPrice") double maxPrice, Pageable pageable);
     Page<Product> findAll(Pageable pageable);
 
     @Query("SELECT p FROM Product p JOIN p.productCategories pc JOIN pc.category c WHERE c.name = :categoryName")

@@ -187,8 +187,8 @@
 
         <!-- 로그인한 사용자에게만 계정 정보 표시 -->
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
-          <span class="fs-6 secondary-font text-muted">Username</span>
-          <h5 class="mb-0"th:text="${session.member.username}"/>
+          <span class="fs-6 secondary-font text-muted">Nickname</span>
+          <h5 class="mb-0"th:text="${session.member.nickname}"/>
         </div>
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
           <span class="fs-6 secondary-font text-muted">Email</span>
@@ -285,28 +285,27 @@
               <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                  aria-expanded="false">Pages</a>
               <ul class="dropdown-menu" aria-labelledby="pages">
-                <li><a href="/auth/about" class="dropdown-item">About Us</a></li>
+                <li><a href="/index/about" class="dropdown-item">About Us</a></li>
                 <li><a href="/shop" class="dropdown-item">Shop</a></li>
-                <li><a href="/members/cart" class="dropdown-item">Cart</a></li>
-                <li><a href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
-                <li><a href="#" class="dropdown-item">Checkout-YET</a></li>
-                <li><a href="/auth/blog" class="dropdown-item">Blog</a></li>
-                <li><a href="/auth/post" class="dropdown-item">Single Post</a></li>
-                <li><a href="/auth/contact" class="dropdown-item">Contact</a></li>
-                <li><a href="/auth/faq" class="dropdown-item">FAQs</a></li>
-                <li><a href="/auth/account" class="dropdown-item">Account</a></li>
-                <li><a href="/auth/error" class="dropdown-item">Error 404</a></li>
-                <li><a href="/auth/style" class="dropdown-item">Styles</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/cart" class="dropdown-item">Cart</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/orders/list" class="dropdown-item">Checkout</a></li>
+                <li><a href="/index/blog" class="dropdown-item">Blog</a></li>
+                <li><a href="/index/single-post" class="dropdown-item">Single Post</a></li>
+                <li><a href="/index/contact" class="dropdown-item">Contact</a></li>
+                <li><a href="/index/faq" class="dropdown-item">FAQs</a></li>
+                <li><a href="/members/signup" class="dropdown-item">Account</a></li>
+                <li><a href="/index/error" class="dropdown-item">Error 404</a></li>
               </ul>
             </li>
             <li class="nav-item">
               <a href="/shop" class="nav-link">Shop</a>
             </li>
             <li class="nav-item">
-              <a href="/auth/blog" class="nav-link">Blog</a>
+              <a href="/index/blog" class="nav-link">Blog</a>
             </li>
             <li class="nav-item">
-              <a href="/auth/contact" class="nav-link">Contact</a>
+              <a href="/index/contact" class="nav-link">Contact</a>
             </li>
             <!-- ADMIN 계정만 버튼 보이게-->
             <li class="nav-item">
@@ -452,7 +451,7 @@
         <nav class="navigation paging-navigation text-center mt-5" role="navigation">
           <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
             <!-- 이전 페이지 버튼 -->
-            <a th:href="@{'/'+(page=${currentPage - 1})}"
+            <a th:href="@{/shop/{categoryType}/{categoryKey}(categoryType=${categoryType}, categoryKey=${categoryKey}, page=${currentPage - 1})}"
                class="pagination-arrow d-flex align-items-center mx-3"
                th:disabled="${currentPage == 0}">
               <iconify-icon icon="ic:baseline-keyboard-arrow-left" class="pagination-arrow fs-1"></iconify-icon>
@@ -460,14 +459,15 @@
 
             <!-- 페이지 번호들 -->
             <th:block th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
-              <a th:href="@{'/'+(page=${pageNum})}"
+              <a th:href="@{/shop/{categoryType}/{categoryKey}(categoryType=${categoryType}, categoryKey=${categoryKey}, page=${pageNum})}"
                  th:text="${pageNum + 1}"
                  th:classappend="${pageNum == currentPage ? ' current' : ''}"
-                 class="page-numbers mt-2 fs-3 mx-3"></a>
+                 class="page-numbers mt-2 fs-3 mx-3">
+              </a>
             </th:block>
 
             <!-- 다음 페이지 버튼 -->
-            <a th:href="@{'/'+${categoryTag}+(page=${currentPage + 1})}"
+            <a th:href="@{/shop/{categoryType}/{categoryKey}(categoryType=${categoryType}, categoryKey=${categoryKey}, page=${currentPage + 1})}"
                class="pagination-arrow d-flex align-items-center mx-3"
                th:disabled="${currentPage == totalPages - 1}">
               <iconify-icon icon="ic:baseline-keyboard-arrow-right" class="pagination-arrow fs-1"></iconify-icon>
@@ -756,16 +756,16 @@
               <a href="/index" class="nav-link">Home</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">About us</a>
+              <a href="/index/about" class="nav-link">About us</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Offer </a>
+              <a href="/index/error" class="nav-link">Offer </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Services</a>
+              <a href="/index/error" class="nav-link">Services</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Conatct Us</a>
+              <a href="/index/error" class="nav-link">Conatct Us</a>
             </li>
           </ul>
         </div>
@@ -775,19 +775,19 @@
           <h5>Help Center</h5>
           <ul class="menu-list list-unstyled">
             <li class="menu-item">
-              <a href="#" class="nav-link">FAQs</a>
+              <a href="/index/faq" class="nav-link">FAQs</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Payment</a>
+              <a href="/index/error" class="nav-link">Payment</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Returns & Refunds</a>
+              <a href="/index/error" class="nav-link">Returns & Refunds</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Checkout</a>
+              <a href="/index/error" class="nav-link">Checkout</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Delivery Information</a>
+              <a href="/index/error" class="nav-link">Delivery Information</a>
             </li>
           </ul>
         </div>

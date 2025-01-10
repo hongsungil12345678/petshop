@@ -187,8 +187,8 @@
 
         <!-- 로그인한 사용자에게만 계정 정보 표시 -->
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
-          <span class="fs-6 secondary-font text-muted">Username</span>
-          <h5 class="mb-0"th:text="${session.member.username}"/>
+          <span class="fs-6 secondary-font text-muted">Nickname</span>
+          <h5 class="mb-0"th:text="${session.member.nickname}"/>
         </div>
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
           <span class="fs-6 secondary-font text-muted">Email</span>
@@ -285,28 +285,27 @@
               <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                  aria-expanded="false">Pages</a>
               <ul class="dropdown-menu" aria-labelledby="pages">
-                <li><a href="/auth/about" class="dropdown-item">About Us</a></li>
+                <li><a href="/index/about" class="dropdown-item">About Us</a></li>
                 <li><a href="/shop" class="dropdown-item">Shop</a></li>
-                <li><a href="/members/cart" class="dropdown-item">Cart</a></li>
-                <li><a href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
-                <li><a href="#" class="dropdown-item">Checkout-YET</a></li>
-                <li><a href="/auth/blog" class="dropdown-item">Blog</a></li>
-                <li><a href="/auth/post" class="dropdown-item">Single Post</a></li>
-                <li><a href="/auth/contact" class="dropdown-item">Contact</a></li>
-                <li><a href="/auth/faq" class="dropdown-item">FAQs</a></li>
-                <li><a href="/auth/account" class="dropdown-item">Account</a></li>
-                <li><a href="/auth/error" class="dropdown-item">Error 404</a></li>
-                <li><a href="/auth/style" class="dropdown-item">Styles</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/cart" class="dropdown-item">Cart</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/orders/list" class="dropdown-item">Checkout</a></li>
+                <li><a href="/index/blog" class="dropdown-item">Blog</a></li>
+                <li><a href="/index/single-post" class="dropdown-item">Single Post</a></li>
+                <li><a href="/index/contact" class="dropdown-item">Contact</a></li>
+                <li><a href="/index/faq" class="dropdown-item">FAQs</a></li>
+                <li><a href="/members/signup" class="dropdown-item">Account</a></li>
+                <li><a href="/index/error" class="dropdown-item">Error 404</a></li>
               </ul>
             </li>
             <li class="nav-item">
               <a href="/shop" class="nav-link">Shop</a>
             </li>
             <li class="nav-item">
-              <a href="/auth/blog" class="nav-link">Blog</a>
+              <a href="/index/blog" class="nav-link">Blog</a>
             </li>
             <li class="nav-item">
-              <a href="/auth/contact" class="nav-link">Contact</a>
+              <a href="/index/contact" class="nav-link">Contact</a>
             </li>
             <!-- ADMIN 계정만 버튼 보이게-->
             <li class="nav-item">
@@ -378,6 +377,9 @@
 
 <section id="Wishlist" class="py-5 my-5">
   <div class="container">
+    <div th:if="${#lists.isEmpty(wishlistItemList)}">
+      <p>찜한 상품이 없습니다.</p>
+    </div>
     <table class="table" id="wishlistTable">
       <thead>
       <tr>
@@ -432,177 +434,6 @@
           </div>
         </td>
       </tr>
-      </tbody>
-
-
-
-
-      <!-- 절취선-->
-      <tr>
-        <td class="py-4">
-          <div class="cart-info d-flex flex-wrap align-items-center ">
-            <div class="col-lg-3">
-              <div class="card-image">
-                <img src="/images/item2.jpg" alt="cloth" class="img-fluid">
-              </div>
-            </div>
-            <div class="col-lg-9">
-              <div class="card-detail ps-3">
-                <h5 class="card-title">
-                  <a href="#" class="text-decoration-none">DATA  END  POINT</a>
-                </h5>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">$230.00</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">In Stoke</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="d-flex align-items-center">
-            <div class="me-4"><button class="btn btn-dark p-3 text-uppercase fs-6 btn-rounded-none w-100">Add to
-              cart</button></div>
-            <div class="cart-remove">
-              <a href="#">
-                <svg width="24" height="24">
-                  <use xlink:href="#trash"></use>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td class="py-4">
-          <div class="cart-info d-flex flex-wrap align-items-center ">
-            <div class="col-lg-3">
-              <div class="card-image">
-                <img src="/images/item11.jpg" alt="cloth" class="img-fluid">
-              </div>
-            </div>
-            <div class="col-lg-9">
-              <div class="card-detail ps-3">
-                <h5 class="card-title">
-                  <a href="#" class="text-decoration-none">Cat Food</a>
-                </h5>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">$100.00</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">In Stoke</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="d-flex align-items-center">
-            <div class="me-4"><button class="btn btn-dark p-3 text-uppercase fs-6 btn-rounded-none w-100">Add to
-              cart</button></div>
-            <div class="cart-remove">
-              <a href="#">
-                <svg width="24" height="24">
-                  <use xlink:href="#trash"></use>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td class="py-4">
-          <div class="cart-info d-flex flex-wrap align-items-center ">
-            <div class="col-lg-3">
-              <div class="card-image">
-                <img src="/images/item14.jpg" alt="cloth" class="img-fluid">
-              </div>
-            </div>
-            <div class="col-lg-9">
-              <div class="card-detail ps-3">
-                <h5 class="card-title">
-                  <a href="#" class="text-decoration-none">Dog Food</a>
-                </h5>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">$90.00</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">Out of Stoke</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="d-flex align-items-center">
-            <div class="me-4"><button class="btn btn-dark p-3 text-uppercase fs-6 btn-rounded-none w-100">Add to
-              cart</button></div>
-            <div class="cart-remove">
-              <a href="#">
-                <svg width="24" height="24">
-                  <use xlink:href="#trash"></use>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td class="py-4">
-          <div class="cart-info d-flex flex-wrap align-items-center ">
-            <div class="col-lg-3">
-              <div class="card-image">
-                <img src="/images/item7.jpg" alt="cloth" class="img-fluid">
-              </div>
-            </div>
-            <div class="col-lg-9">
-              <div class="card-detail ps-3">
-                <h5 class="card-title">
-                  <a href="#" class="text-decoration-none">Yellow T-shirt</a>
-                </h5>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">$250.00</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="total-price">
-            <span class="secondary-font fw-medium">In Stoke</span>
-          </div>
-        </td>
-        <td class="py-4 align-middle">
-          <div class="d-flex align-items-center">
-            <div class="me-4"><button class="btn btn-dark p-3 text-uppercase fs-6 btn-rounded-none w-100">Add to
-              cart</button></div>
-            <div class="cart-remove">
-              <a href="#">
-                <svg width="24" height="24">
-                  <use xlink:href="#trash"></use>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </td>
-      </tr>
-
       </tbody>
     </table>
   </div>
@@ -787,43 +618,43 @@
           <h3>Quick Links</h3>
           <ul class="menu-list list-unstyled">
             <li class="menu-item">
-              <a href="#" class="nav-link">Home</a>
+              <a href="/index" class="nav-link">Home</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">About us</a>
+              <a href="/index/about" class="nav-link">About us</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Offer </a>
+              <a href="/index/error" class="nav-link">Offer </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Services</a>
+              <a href="/index/error" class="nav-link">Services</a>
             </li>
             <li class="menu-item">
-              <a href="#" class="nav-link">Conatct Us</a>
+              <a href="/index/error" class="nav-link">Conatct Us</a>
             </li>
           </ul>
         </div>
       </div>
       <div class="col-md-3">
         <div class="footer-menu">
-          <h3>Help Center</h5>
-            <ul class="menu-list list-unstyled">
-              <li class="menu-item">
-                <a href="#" class="nav-link">FAQs</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Payment</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Returns & Refunds</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Checkout</a>
-              </li>
-              <li class="menu-item">
-                <a href="#" class="nav-link">Delivery Information</a>
-              </li>
-            </ul>
+          <h5>Help Center</h5>
+          <ul class="menu-list list-unstyled">
+            <li class="menu-item">
+              <a href="/index/faq" class="nav-link">FAQs</a>
+            </li>
+            <li class="menu-item">
+              <a href="/index/error" class="nav-link">Payment</a>
+            </li>
+            <li class="menu-item">
+              <a href="/index/error" class="nav-link">Returns & Refunds</a>
+            </li>
+            <li class="menu-item">
+              <a href="/index/error" class="nav-link">Checkout</a>
+            </li>
+            <li class="menu-item">
+              <a href="/index/error" class="nav-link">Delivery Information</a>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="col-md-3">

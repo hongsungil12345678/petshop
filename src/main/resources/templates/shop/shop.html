@@ -187,8 +187,8 @@
 
         <!-- 로그인한 사용자에게만 계정 정보 표시 -->
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
-          <span class="fs-6 secondary-font text-muted">Username</span>
-          <h5 class="mb-0"th:text="${session.member.username}"/>
+          <span class="fs-6 secondary-font text-muted">Nickname</span>
+          <h5 class="mb-0"th:text="${session.member.nickname}"/>
         </div>
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
           <span class="fs-6 secondary-font text-muted">Email</span>
@@ -285,18 +285,17 @@
               <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                  aria-expanded="false">Pages</a>
               <ul class="dropdown-menu" aria-labelledby="pages">
-                <li><a href="/auth/about" class="dropdown-item">About Us</a></li>
+                <li><a href="/index/about" class="dropdown-item">About Us</a></li>
                 <li><a href="/shop" class="dropdown-item">Shop</a></li>
-                <li><a href="/members/cart" class="dropdown-item">Cart</a></li>
-                <li><a href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
-                <li><a href="#" class="dropdown-item">Checkout-YET</a></li>
-                <li><a href="/auth/blog" class="dropdown-item">Blog</a></li>
-                <li><a href="/auth/post" class="dropdown-item">Single Post</a></li>
-                <li><a href="/auth/contact" class="dropdown-item">Contact</a></li>
-                <li><a href="/auth/faq" class="dropdown-item">FAQs</a></li>
-                <li><a href="/auth/account" class="dropdown-item">Account</a></li>
-                <li><a href="/auth/error" class="dropdown-item">Error 404</a></li>
-                <li><a href="/auth/style" class="dropdown-item">Styles</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/cart" class="dropdown-item">Cart</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/orders/list" class="dropdown-item">Checkout</a></li>
+                <li><a href="/index/blog" class="dropdown-item">Blog</a></li>
+                <li><a href="/index/single-post" class="dropdown-item">Single Post</a></li>
+                <li><a href="/index/contact" class="dropdown-item">Contact</a></li>
+                <li><a href="/index/faq" class="dropdown-item">FAQs</a></li>
+                <li><a href="/members/signup" class="dropdown-item">Account</a></li>
+                <li><a href="/index/error" class="dropdown-item">Error 404</a></li>
               </ul>
             </li>
             <li class="nav-item">

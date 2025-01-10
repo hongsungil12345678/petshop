@@ -161,11 +161,11 @@ public class ProductService {
     public List<Product> getProductsByCategoryTags(String categoryTag){
         return productRepository.findByCategoryTags(categoryTag);
     }
-    // 가격 필터링
-    @Transactional(readOnly = true)
-    public List<Product> filterProductsByPrice(double minPrice, double maxPrice) {
-        return productRepository.findProductsByPriceRange(minPrice, maxPrice);
-    }
+    // 가격 필터링 , 페이징 추가
+//    @Transactional(readOnly = true)
+//    public List<Product> filterProductsByPrice(double minPrice, double maxPrice) {
+//        return productRepository.findProductsByPriceRange(minPrice, maxPrice);
+//    }
 
     public Page<Product> getProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
@@ -181,5 +181,9 @@ public class ProductService {
     public Page<Product> getProductsByCategoryTags(String categoryTag,int page,int size){
         Pageable pageable = PageRequest.of(page,size);
         return productRepository.findByCategoryTags(categoryTag,pageable);
+    }
+    public Page<Product> filterProductsByPrice(double minPrice, double maxPrice, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findProductsByPriceRange(minPrice, maxPrice, pageable);
     }
 }

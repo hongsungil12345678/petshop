@@ -100,45 +100,35 @@
   </div>
 </div>
 
+
 <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
   <div class="offcanvas-header justify-content-center">
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <div class="order-md-last">
+    <div class="order-md-last" sec:authorize="isAuthenticated()">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-primary">Your cart</span>
-        <span class="badge bg-primary rounded-circle pt-2">3</span>
+        <span class="badge bg-primary rounded-circle pt-2" th:text="${session.cart.cartQuantity}"></span>
       </h4>
       <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Grey Hoodie</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$12</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Dog Food</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$8</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Soft Toy</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$5</span>
-        </li>
+        <div th:each="cartItem:${session.cartItems}">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0" th:text="${cartItem.product.title}"></h6>
+              <small class="text-body-secondary"th:text="${cartItem.product.description}+' Quantity:'+${cartItem.quantity}"></small>
+            </div>
+            <span class="text-body-secondary" th:text="'$'+${cartItem.product.price}"></span>
+          </li>
+        </div>
         <li class="list-group-item d-flex justify-content-between">
           <span class="fw-bold">Total (USD)</span>
-          <strong>$20</strong>
+          <strong th:text="'$'+${session.cart.cartTotalPrice}"></strong>
         </li>
       </ul>
-
-      <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+      <a href="/members/address">
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+      </a>
     </div>
   </div>
 </div>
@@ -155,7 +145,7 @@
         Search
       </h4>
       <div class="search-bar border rounded-2 border-dark-subtle">
-        <form id="search-form" class="text-center d-flex align-items-center" action="#" method="">
+        <form id="search-form" class="text-center d-flex align-items-center" action="" method="">
           <input type="text" class="form-control border-0 bg-transparent" placeholder="Search Here" />
           <iconify-icon icon="tabler:search" class="fs-4 me-3"></iconify-icon>
         </form>
@@ -198,8 +188,8 @@
 
         <!-- 로그인한 사용자에게만 계정 정보 표시 -->
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
-          <span class="fs-6 secondary-font text-muted">Username</span>
-          <h5 class="mb-0"th:text="${session.member.username}"/>
+          <span class="fs-6 secondary-font text-muted">Nickname</span>
+          <h5 class="mb-0"th:text="${session.member.nickname}"/>
         </div>
         <div sec:authorize="isAuthenticated()" class="support-box text-end d-none d-xl-block">
           <span class="fs-6 secondary-font text-muted">Email</span>
@@ -221,12 +211,12 @@
           <li>
             <!-- 비로그인 상태에서 보이는 링크 -->
             <a sec:authorize="isAnonymous()" href="/members/signup" class="mx-3">
-              <iconify-icon icon="health-icons:person" class="fs-4"></iconify-icon>
+              <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
             </a>
 
             <!-- 로그인 상태에서 보이는 링크 -->
             <a sec:authorize="isAuthenticated()" href="/orders/list" class="mx-3">
-              <iconify-icon icon="health-icons:person" class="fs-4"></iconify-icon>
+              <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
             </a>
           </li>
           <li>
@@ -249,7 +239,7 @@
             <a sec:authorize="isAuthenticated()" href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
                aria-controls="offcanvasCart">
               <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
-              <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2"th:text="${cart.cartQuantity}"></span>
+              <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2"th:text="${session.cart.cartItems.size()}"></span>
             </a>
             <a sec:authorize="isAnonymous()" href="/members/signup" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
                aria-controls="offcanvasCart">
@@ -266,7 +256,6 @@
             </a>
           </li>
         </ul>
-
       </div>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -297,28 +286,27 @@
               <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown"
                  aria-expanded="false">Pages</a>
               <ul class="dropdown-menu" aria-labelledby="pages">
-                <li><a href="/auth/about" class="dropdown-item">About Us</a></li>
+                <li><a href="/index/about" class="dropdown-item">About Us</a></li>
                 <li><a href="/shop" class="dropdown-item">Shop</a></li>
-                <li><a href="/members/cart" class="dropdown-item">Cart</a></li>
-                <li><a href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
-                <li><a href="#" class="dropdown-item">Checkout-YET</a></li>
-                <li><a href="/auth/blog" class="dropdown-item">Blog</a></li>
-                <li><a href="/auth/post" class="dropdown-item">Single Post</a></li>
-                <li><a href="/auth/contact" class="dropdown-item">Contact</a></li>
-                <li><a href="/auth/faq" class="dropdown-item">FAQs</a></li>
-                <li><a href="/auth/account" class="dropdown-item">Account</a></li>
-                <li><a href="/auth/error" class="dropdown-item">Error 404</a></li>
-                <li><a href="/auth/style" class="dropdown-item">Styles</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/cart" class="dropdown-item">Cart</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/members/wishlist" class="dropdown-item">Wishlist</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/orders/list" class="dropdown-item">Checkout</a></li>
+                <li><a href="/index/blog" class="dropdown-item">Blog</a></li>
+                <li><a href="/index/single-post" class="dropdown-item">Single Post</a></li>
+                <li><a href="/index/contact" class="dropdown-item">Contact</a></li>
+                <li><a href="/index/faq" class="dropdown-item">FAQs</a></li>
+                <li><a href="/members/signup" class="dropdown-item">Account</a></li>
+                <li><a href="/index/error" class="dropdown-item">Error 404</a></li>
               </ul>
             </li>
             <li class="nav-item">
               <a href="/shop" class="nav-link">Shop</a>
             </li>
             <li class="nav-item">
-              <a href="/auth/blog" class="nav-link">Blog</a>
+              <a href="/index/blog" class="nav-link">Blog</a>
             </li>
             <li class="nav-item">
-              <a href="/auth/contact" class="nav-link">Contact</a>
+              <a href="/index/contact" class="nav-link">Contact</a>
             </li>
             <!-- ADMIN 계정만 버튼 보이게-->
             <li class="nav-item">
@@ -360,7 +348,7 @@
               <li class="">
                 <a sec:authorize="isAuthenticated()"  href="#"class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
                   <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
-                  <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2"th:text="${cartItems.size()}"></span>
+                  <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2"th:text="${session.cart.cartItems.size()}"></span>
                 </a>
                 <a sec:authorize="isAnonymous()" class="mx-3"  href="/members/signup" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
                   <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
@@ -368,17 +356,10 @@
                 </a>
               </li>
             </ul>
-
           </div>
-
         </div>
-
       </div>
-
     </nav>
-
-
-
   </div>
 </header>
 
@@ -387,9 +368,9 @@
     <div class="hero-content py-5 my-3">
       <h2 class="display-1 mt-3 mb-0">ADMIN</h2>
       <nav class="breadcrumb">
-        <a class="breadcrumb-item nav-link" href="/auth/index">Home</a>
-        <a class="breadcrumb-item nav-link" href="/auth/index">Pages</a>
-        <span class="breadcrumb-item active" aria-current="page">Checkout</span>
+        <a class="breadcrumb-item nav-link" href="/index">Home</a>
+        <a class="breadcrumb-item nav-link" href="/shop">Pages</a>
+        <span class="breadcrumb-item active" aria-current="page">Admin</span>
       </nav>
     </div>
   </div>
