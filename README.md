@@ -341,7 +341,10 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
 ---
 
 
-2. 유저 플로우 (User Flow)
+# 프로젝트 문서
+
+## 1. 유저 플로우 (User Flow)
+
 #### **1) 회원가입 및 로그인**  
 - 사용자는 `회원가입` 또는 `로그인`을 통해 애플리케이션에 접근할 수 있습니다.  
 - 로그인 성공 후, 사용자 권한(`ROLE_USER`, `ROLE_ADMIN`, `ROLE_SOCIAL`)에 따라 접근 가능한 페이지가 달라집니다.  
@@ -364,70 +367,88 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
 
 ---
 
-2.1 회원가입 및 로그인
-회원가입 (Sign Up)
-1.	유저가 회원가입 페이지에 접근 
-o	/register URL로 접근.
-2.	유저 입력 데이터를 폼 제출 
-o	MemberController.register() 메서드가 요청을 처리.
-3.	데이터 검증 및 저장 
-o	MemberService.saveMember()에서 비밀번호 암호화 및 DB에 저장.
-o	MemberRepository.save()로 DB에 저장.
-4.	회원가입 완료 후 페이지 이동 
-o	회원가입 완료 메시지를 출력 후 로그인 페이지로 리다이렉트.
-로그인 (Login)
-1.	유저가 로그인 페이지에 접근 
-o	/login URL로 접근.
-2.	Spring Security 인증 처리 
-o	CustomAuthenticationProvider가 사용자 인증.
-3.	결과 처리 
-o	성공 시: CustomLoginSuccessHandler가 홈 페이지로 리다이렉트.
-o	실패 시: CustomLoginFailureHandler가 에러 메시지 표시.
-________________________________________
-2.2 상품 조회 및 장바구니 관리
-상품 조회 (View Products)
-1.	유저가 상품 리스트 페이지에 접근 
-o	/products URL 호출.
-2.	상품 데이터 조회 
-o	ProductController.getProducts()에서 요청을 처리.
-o	ProductService.getAllProducts()를 통해 상품 리스트를 가져옴.
-3.	상품 목록 출력 
-o	ProductRepository.findAll()로 상품 데이터 조회 후, 뷰에 전달하여 출력.
-장바구니 추가 (Add to Cart)
-1.	유저가 상품을 장바구니에 추가 
-o	/cart/add URL 호출.
-2.	장바구니 로직 처리 
-o	CartController.addToCart()에서 요청 처리.
-o	CartItemService.addCartItem()가 장바구니에 상품을 추가하거나 수량을 업데이트.
-o	CartItemRepository.save()로 DB에 장바구니 아이템을 저장.
-________________________________________
-2.3 주문 생성 및 결제
-주문 생성 (Create Order)
-1.	유저가 장바구니 페이지에서 "주문하기" 클릭 
-o	/checkout URL 호출.
-2.	주문 생성 로직 처리 
-o	OrderController.placeOrder()가 요청을 처리.
-o	OrderService.createOrder()에서 주문 엔티티를 생성하고 DB에 저장.
-o	OrderRepository.save()로 DB에 저장.
-3.	주문 완료 후 상태 업데이트 및 리다이렉트 
-o	주문 상태가 PENDING에서 COMPLETED로 업데이트됨.
-결제 (Payment)
-1.	결제 정보 입력 및 처리 
-o	Portone API를 이용하여 결제 시스템 연동, 실제 결제 시스템 적용
-o	PaymentService.processPayment()에서 결제 정보를 처리.
-o	결제 성공 시, 주문 상태를 TEMPORARY->COMPLETED로 업데이트.
-o	실패 시, 에러 메시지를 사용자에게 전달.
-________________________________________
-2.4 OAuth2 소셜 로그인
-1.	소셜 로그인 요청 
-o	/oauth2/authorization/{provider} URL 호출.
-2.	Spring Security OAuth2 인증 처리 
-o	CustomOAuth2UserService.loadUser()에서 사용자 정보를 매핑.
-3.	소셜 계정과 기존 계정 연결 또는 새 계정 생성 
-o	OAuth2 로그인 후 기존 계정이 있을 경우 연결하고, 없으면 새 계정을 생성.
-________________________________________
-3. 코드 순서도
-3.1 회원가입 요청 처리
+## 2. 회원가입 및 로그인
+
+### 2.1 회원가입 및 로그인
+
+#### **회원가입 (Sign Up)**
+1. 유저가 회원가입 페이지에 접근  
+    - `/register` URL로 접근.
+2. 유저 입력 데이터를 폼 제출  
+    - `MemberController.register()` 메서드가 요청을 처리.
+3. 데이터 검증 및 저장  
+    - `MemberService.saveMember()`에서 비밀번호 암호화 및 DB에 저장.
+    - `MemberRepository.save()`로 DB에 저장.
+4. 회원가입 완료 후 페이지 이동  
+    - 회원가입 완료 메시지를 출력 후 로그인 페이지로 리다이렉트.
+
+#### **로그인 (Login)**
+1. 유저가 로그인 페이지에 접근  
+    - `/login` URL로 접근.
+2. Spring Security 인증 처리  
+    - `CustomAuthenticationProvider`가 사용자 인증.
+3. 결과 처리  
+    - 성공 시: `CustomLoginSuccessHandler`가 홈 페이지로 리다이렉트.
+    - 실패 시: `CustomLoginFailureHandler`가 에러 메시지 표시.
+
+---
+
+### 2.2 상품 조회 및 장바구니 관리
+
+#### **상품 조회 (View Products)**
+1. 유저가 상품 리스트 페이지에 접근  
+    - `/products` URL 호출.
+2. 상품 데이터 조회  
+    - `ProductController.getProducts()`에서 요청을 처리.
+    - `ProductService.getAllProducts()`를 통해 상품 리스트를 가져옴.
+3. 상품 목록 출력  
+    - `ProductRepository.findAll()`로 상품 데이터 조회 후, 뷰에 전달하여 출력.
+
+#### **장바구니 추가 (Add to Cart)**
+1. 유저가 상품을 장바구니에 추가  
+    - `/cart/add` URL 호출.
+2. 장바구니 로직 처리  
+    - `CartController.addToCart()`에서 요청 처리.
+    - `CartItemService.addCartItem()`가 장바구니에 상품을 추가하거나 수량을 업데이트.
+    - `CartItemRepository.save()`로 DB에 장바구니 아이템을 저장.
+
+---
+
+### 2.3 주문 생성 및 결제
+
+#### **주문 생성 (Create Order)**
+1. 유저가 장바구니 페이지에서 "주문하기" 클릭  
+    - `/checkout` URL 호출.
+2. 주문 생성 로직 처리  
+    - `OrderController.placeOrder()`가 요청을 처리.
+    - `OrderService.createOrder()`에서 주문 엔티티를 생성하고 DB에 저장.
+    - `OrderRepository.save()`로 DB에 저장.
+3. 주문 완료 후 상태 업데이트 및 리다이렉트  
+    - 주문 상태가 PENDING에서 COMPLETED로 업데이트됨.
+
+#### **결제 (Payment)**
+1. 결제 정보 입력 및 처리  
+    - Portone API를 이용하여 결제 시스템 연동, 실제 결제 시스템 적용
+    - `PaymentService.processPayment()`에서 결제 정보를 처리.
+    - 결제 성공 시, 주문 상태를 TEMPORARY->COMPLETED로 업데이트.
+    - 실패 시, 에러 메시지를 사용자에게 전달.
+
+---
+
+### 2.4 OAuth2 소셜 로그인
+1. 소셜 로그인 요청  
+    - `/oauth2/authorization/{provider}` URL 호출.
+2. Spring Security OAuth2 인증 처리  
+    - `CustomOAuth2UserService.loadUser()`에서 사용자 정보를 매핑.
+3. 소셜 계정과 기존 계정 연결 또는 새 계정 생성  
+    - OAuth2 로그인 후 기존 계정이 있을 경우 연결하고, 없으면 새 계정을 생성.
+
+---
+
+## 3. 코드 순서도
+
+### 3.1 회원가입 요청 처리
+```
 [MemberController.register()]
    |
    v
@@ -444,8 +465,12 @@ ________________________________________
    |
    v
 [회원가입 완료 → View 리턴] (회원가입 완료 메시지)
-________________________________________
-3.2 로그인 요청 처리
+```
+
+---
+
+### 3.2 로그인 요청 처리
+```
 [Spring Security Filter]
    |
    v
@@ -475,9 +500,11 @@ ________________________________________
 [WebConfig] (웹 관련 설정, 인터셉터 등록 및 설정)
 ```
 
-________________________________________
-3.3 상품 조회 및 장바구니 추가
-상품 조회
+---
+
+### 3.3 상품 조회 및 장바구니 추가
+-	상품 조회 
+```
 [ProductController.getProducts()]
    |
    v
@@ -488,7 +515,11 @@ ________________________________________
    |
    v
 [상품 데이터 View에 전달] (상품 목록 출력)
-장바구니 추가
+```
+---
+
+-	장바구니 추가
+```
 [CartController.addToCart()]
    |
    v
@@ -499,9 +530,15 @@ ________________________________________
    |
    v
 [장바구니 데이터 View에 갱신] (장바구니 UI 갱신)
-________________________________________
-3.4 주문 생성 및 결제 처리
-주문 생성
+```
+
+---
+
+---
+
+### 3.4 주문 생성 및 결제 처리
+-	주문 생성 
+```
 [OrderController.placeOrder()]
    |
    v
@@ -512,7 +549,11 @@ ________________________________________
    |
    v
 [주문 완료 → View 리턴] (주문 확인 페이지)
-결제 처리
+```
+---
+
+-	결제 처리 
+```
 [PaymentService.processPayment()]
    |
    v
@@ -520,41 +561,58 @@ ________________________________________
    |
    v
 [결제 완료 → View 리턴] (결제 완료 페이지)
-________________________________________
-4. 적용 사항
-4.1 보안(Security)
-•	Spring Security로 세션 기반 인증 및 OAuth2 소셜 로그인 처리.
-•	비밀번호 암호화: 회원가입 시 BCryptPasswordEncoder를 사용해 비밀번호 암호화.
-•	권한 관리: 사용자 권한에 따라 접근 제한. 예: 일반 유저는 상품 보기, 장바구니 추가 가능. 관리자만 상품 수정, 삭제 가능.
-4.2 데이터 유효성 검증
-•	DTO 검증: 회원가입, 로그인 시 유효성 검사를 DTO에서 처리. (예: 이메일 포맷, 비밀번호 길이 등)
-•	예외 처리: 잘못된 입력은 예외를 발생시켜 적절한 메시지를 사용자에게 전달.
-4.3 서비스 분리
-•	서비스 계층 분리: 각 비즈니스 로직은 서비스 계층에서 처리하고, 컨트롤러는 요청을 받아 서비스 호출만 담당.
-4.4 결제 처리
-•	결제 API를 외부 서비스(PortOne API)와 연동하여 처리,
-•	결제 성공 시 Product- (OrderQuantity 증가, stockQuantity 감소), OrderStatus(Pending->Confirmed) , PaymentStatus(temporary ->completed), Payment- (transaction_ID, storeID) 저장________________________________________
-5. 프로젝트 구조
-5.1 Member 관련 기능
-•	MemberController: 회원가입 및 로그인 처리.
-•	MemberService: 회원 가입, 비밀번호 암호화, 유효성 검사.
-•	MemberRepository: DB와의 연결.
-5.2 상품 관련 기능
-•	ProductController: 상품 조회, 상세 조회 처리.
-•	ProductService: 상품 리스트 처리.
-•	ProductRepository: 상품 DB 조회.
-5.3 장바구니 기능
-•	CartController: 장바구니 추가/삭제 처리.
-•	CartItemService: 장바구니 아이템 관리.
-•	CartItemRepository: 장바구니 아이템 DB 저장.
-5.4 주문 및 결제 처리
-•	OrderController: 주문 생성.
-•	OrderService: 주문 생성, 결제 처리.
-•	OrderRepository: 주문 DB 저장.
-•	PaymentService: 결제 처리 및 상태 업데이트.
-5.5 OAuth2 로그인
-•	CustomOAuth2UserService: 소셜 로그인 처리.
-•	CustomAuthenticationProvider: 사용자 인증 처리.
+```
+
+---
+
+## 4. 적용 사항
+
+### 4.1 보안(Security)
+- Spring Security로 세션 기반 인증 및 OAuth2 소셜 로그인 처리.
+- 비밀번호 암호화: 회원가입 시 `BCryptPasswordEncoder`를 사용해 비밀번호 암호화.
+- 권한 관리: 사용자 권한에 따라 접근 제한. 예: 일반 유저는 상품 보기, 장바구니 추가 가능. 관리자만 상품 수정, 삭제 가능.
+
+### 4.2 데이터 유효성 검증
+- DTO 검증: 회원가입, 로그인 시 유효성 검사를 DTO에서 처리. (예: 이메일 포맷, 비밀번호 길이 등)
+- 예외 처리: 잘못된 입력은 예외를 발생시켜 적절한 메시지를 사용자에게 전달.
+
+### 4.3 서비스 분리
+- 서비스 계층 분리: 각 비즈니스 로직은 서비스 계층에서 처리하고, 컨트롤러는 요청을 받아 서비스 호출만 담당.
+
+### 4.4 결제 처리
+- 결제 API를 외부 서비스(PortOne API)와 연동하여 처리.
+- 결제 성공 시 `Product`- (OrderQuantity 증가, stockQuantity 감소), `OrderStatus`(Pending->Confirmed), `PaymentStatus`(Temporary -> Completed), `Payment`- (transaction_ID, storeID) 저장.
+
+---
+
+## 5. 프로젝트 구조
+
+### 5.1 Member 관련 기능
+- `MemberController`: 회원가입 및 로그인 처리.
+- `MemberService`: 회원 가입, 비밀번호 암호화, 유효성 검사.
+- `MemberRepository`: DB와의 연결.
+
+### 5.2 상품 관련 기능
+- `ProductController`: 상품 조회, 상세 조회 처리.
+- `ProductService`: 상품 리스트 처리.
+- `ProductRepository`: 상품 DB 조회.
+
+### 5.3 장바구니 기능
+- `CartController`: 장바구니 추가/삭제 처리.
+- `CartItemService`: 장바구니 아이템 관리.
+- `CartItemRepository`: 장바구니 아이템 DB 저장.
+
+### 5.4 주문 및 결제 처리
+- `OrderController`: 주문 생성.
+- `OrderService`: 주문 생성, 결제 처리.
+- `OrderRepository`: 주문 DB 저장.
+- `PaymentService`: 결제 처리 및 상태 업데이트.
+
+### 5.5 OAuth2 로그인
+- `CustomOAuth2UserService`: 소셜 로그인 처리.
+- `CustomAuthenticationProvider`: 사용자 인증 처리.
+
+
 
 ----
 
