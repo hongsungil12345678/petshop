@@ -216,25 +216,25 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
      - 사용자 정보를 표준화된 형태로 변환.
      - `toEntity()` 메서드를 통해 매핑된 사용자 정보를 엔티티로 변환 및 Role 설정.
    - **동작:**
-     1. `of()` 메서드 호출.
-     2. 제공된 OAuth2 사용자 정보를 매핑.
-     3. `toEntity()` 메서드로 사용자 엔티티로 변환.
+     - `of()` 메서드 호출.
+     - 제공된 OAuth2 사용자 정보를 매핑.
+     - `toEntity()` 메서드로 사용자 엔티티로 변환.
 
 2. **CustomOAuth2UserService**
    - **역할:**
      - OAuth2 로그인 시 사용자 정보를 처리.
      - 새 사용자면 DB에 저장하고, 기존 사용자면 정보를 갱신.
    - **동작:**
-     1. `loadUser(OAuth2UserRequest userRequest)` 호출.
-     2. 제공된 OAuth2User 정보를 가져옴.
-     3. 사용자 정보를 DB에 저장 또는 업데이트.
+     - `loadUser(OAuth2UserRequest userRequest)` 호출.
+     -  제공된 OAuth2User 정보를 가져옴.
+     -  사용자 정보를 DB에 저장 또는 업데이트.
 
 3. **CustomOAuth2AuthenticationSuccessHandler**
    - **역할:**
      - OAuth2 인증 성공 후 사용자 처리.
    - **동작:**
-     1. OAuth2 인증 성공 후 호출됨.
-     2. 사용자의 권한에 따라 다른 URL로 리다이렉션.
+     - OAuth2 인증 성공 후 호출됨.
+     - 사용자의 권한에 따라 다른 URL로 리다이렉션.
 
 ---
 
