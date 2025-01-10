@@ -494,7 +494,7 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
    |
    v
 [CustomLoginFailureHandler (실패 시 에러 메시지)]
-|
+   |
    v
 [WebConfig] (웹 관련 설정, 인터셉터 등록 및 설정)
 ```
