@@ -888,8 +888,6 @@ PetShop 프로젝트에서 Spring Security와 OAuth2.0 인증이 어떻게 동�
 
 ---
 
-### **이 설명은 프로젝트 코드를 분석한 결과를 바탕으로 작성되었으며, 추가적인 질문이나 세부 구현 논의가 필요하다면 언제든 요청해주세요! 😊**
-이제 주어진 클래스들에 대해 각각의 동작 순서를 설명하겠습니다. 기본적으로 이 클래스들은 Spring Security와 관련된 인증 및 사용자 관리 흐름에 관련된 부분입니다. 아래는 각 클래스들이 동작하는 순서를 보여주는 흐름도입니다:
 
 ```
 [MemberController] 
@@ -952,155 +950,10 @@ PetShop 프로젝트에서 Spring Security와 OAuth2.0 인증이 어떻게 동�
 
 
 
-확인했습니다! 주신 내용을 바탕으로 자연스럽게 다시 작성해드릴게요. 중요한 정보가 잘 전달되도록 하고, 가독성을 높이도록 하겠습니다.
+
 
 ---
 
-# Petshop 프로젝트 README
-
-## 프로젝트 개요
-Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양한 반려동물 용품을 탐색하고, 장바구니에 담고, 주문하고, 결제할 수 있습니다. 이 프로젝트는 반려동물 용품의 원활한 쇼핑 경험을 제공하기 위해 설계되었습니다.
-
-## 주요 기능
-- **회원 관리**: 사용자 등록, 로그인, 프로필 관리 기능을 제공합니다.
-- **상품 브라우징**: 카테고리별로 상품을 탐색하고 검색할 수 있습니다.
-- **상품 상세 보기**: 선택한 상품의 상세 정보를 확인할 수 있습니다.
-- **장바구니**: 관심 있는 상품을 장바구니에 추가하고 관리할 수 있습니다.
-- **주문 및 결제**: 주문을 완료하고 다양한 결제 방법을 통해 결제할 수 있습니다.
-- **리뷰 및 평점**: 상품에 대한 리뷰와 평점을 남길 수 있습니다.
-- **위시리스트**: 관심 있는 상품을 위시리스트에 추가하여 나중에 다시 확인할 수 있습니다.
-
-## 기술 스택
-- **백엔드**
-  - Java (version 17), Spring Boot (version 3.3.4)
-  - Spring Data JPA
-  - Spring Security
-  - OAuth2 Client 2.0
-  - Spring Validation
-  - Thymeleaf
-- **데이터베이스**
-  - H2 Database
-- **프론트엔드**
-  - HTML, CSS, JavaScript
-  - Thymeleaf Extras Spring Security6
-- **JSON 처리**
-  - Jackson Databind
-  - Jackson Core
-- **기타 라이브러리**
-  - Lombok
-- **결제**
-  - 포트원 API
-
-## 설치 및 실행 방법
-1. 저장소 클론
-   ```sh
-   git clone https://github.com/hongsungil12345678/petshop1018.git
-   ```
-
-## 프로젝트 구조
-```plaintext
- └─ java
-   └─ main
-      └─ com
-         └─ petshop1018
-            └─ sungil
-               │  SungilApplication.class
-               │
-               ├─ config
-               │  ├─ CustomAuthenticationProvider.class
-               │  ├─ CustomLoginFailureHandler.class
-               │  ├─ CustomLoginSuccessHandler.class
-               │  ├─ CustomUserDetails.class
-               │  ├─ CustomUserDetailsService.class
-               │  ├─ LoginUser.class
-               │  ├─ LoginUserArgumentResolver.class
-               │  ├─ SecurityConfig.class
-               │  └─ WebConfig.class
-               │
-               ├─ controller
-               │  ├─ CartController.class
-               │  ├─ MemberController.class
-               │  ├─ OrderController.class
-               │  └─ ProductController.class
-               │
-               ├─ domain
-               │  ├─ Address.class
-               │  ├─ BaseTimeEntity.class
-               │  ├─ Cart.class
-               │  ├─ CartItem.class
-               │  ├─ Category.class
-               │  ├─ CategoryInitialize.class
-               │  ├─ Member.class
-               │  ├─ Order.class
-               │  ├─ OrderItem.class
-               │  ├─ OrderStatus.class
-               │  ├─ Payment.class
-               │  ├─ PaymentMethod.class
-               │  ├─ PaymentStatus.class
-               │  ├─ Product.class
-               │  ├─ ProductCategory.class
-               │  ├─ ProductInitializer.class
-               │  ├─ Review.class
-               │  ├─ Role.class
-               │  ├─ Wishlist.class
-               │  └─ WishlistItem.class
-               │
-               ├─ dto
-               │  ├─ AddCartItemDto.class
-               │  ├─ AddProductDto.class
-               │  ├─ CategoryDto.class
-               │  ├─ CheckoutForm.class
-               │  ├─ LoginDto.class
-               │  ├─ MemberDto.class
-               │  ├─ OrderItemDto.class
-               │  ├─ ProductDto.class
-               │  ├─ ReviewDto.class
-               │  └─ UpdateMemberDto.class
-               │
-               ├─ oauth
-               │  ├─ CustomOAuth2AuthenticationSuccessHandler.class
-               │  ├─ CustomOAuth2UserService.class
-               │  └─ OAuthAttributes.class
-               │
-               ├─ repository
-               │  ├─ AddressRepository.class
-               │  ├─ CartItemRepository.class
-               │  ├─ CartRepository.class
-               │  ├─ CategoryRepository.class
-               │  ├─ MemberRepository.class
-               │  ├─ OrderItemRepository.class
-               │  ├─ OrderRepository.class
-               │  ├─ PaymentRepository.class
-               │  ├─ ProductCategoryRepository.class
-               │  ├─ ProductRepository.class
-               │  ├─ ReviewRepository.class
-               │  ├─ WishlistItemRepository.class
-               │  └─ WishlistRepository.class
-               │
-               ├─ service
-               │  ├─ AddressService.class
-               │  ├─ CartItemService.class
-               │  ├─ CartService.class
-               │  ├─ CategoryService.class
-               │  ├─ FileService.class
-               │  ├─ MemberService.class
-               │  ├─ OrderItemService.class
-               │  ├─ OrderService.class
-               │  ├─ ProductService.class
-               │  ├─ ReviewService.class
-               │  ├─ WishListItemService.class
-               │  └─ WishListService.class
-               │
-               └─ validator
-                  ├─ AbstractValidator.class
-                  ├─ CustomValidators.class
-                  │  ├─ CheckoutFormValidator.class
-                  │  ├─ EmailValidator.class
-                  │  ├─ NicknameValidator.class
-                  │  └─ UsernameValidator.class
-```
-
-계속해서 마지막 부분을 자연스럽게 마무리하겠습니다.
 
 ---
 
@@ -1174,6 +1027,29 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
    - `WebConfig`에서 정적 리소스 경로를 설정하고, `LoginUserArgumentResolver`를 추가하여 세션에서 사용자 정보를 가져옵니다.
 
 ---
+
+```
+### **2.2 로그인 요청 처리 (Security 관련 내용 포함)**
+
+```plaintext
+[Spring Security Filter]  // Spring Security 필터 체인
+   |
+   v
+[CustomAuthenticationProvider]  // 사용자 인증을 처리하는 커스텀 인증 프로바이더
+   |
+   v
+[CustomUserDetailsService]  // 사용자 정보를 데이터베이스에서 조회하는 서비스
+   |
+   v
+[CustomUserDetails]  // 사용자 세부 정보를 캡슐화한 클래스
+   |
+   v
+[CustomLoginSuccessHandler]  // 로그인 성공 시 후속 처리 핸들러 (성공 시 리다이렉션)
+   |
+   v
+[CustomLoginFailureHandler]  // 로그인 실패 시 후속 처리 핸들러 (실패 시 에러 메시지)
+```
+
 
 ## PetShop 프로젝트 코드 순서도 및 유저 플로우
 
