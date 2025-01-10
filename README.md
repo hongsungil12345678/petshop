@@ -148,6 +148,210 @@ Petshop은 온라인 반려동물 용품 쇼핑몰입니다. 사용자는 다양
 
 ![ERD](https://github.com/user-attachments/assets/f2c9b629-a12d-45b6-bfc2-eaafbc666580)
 
+---
+고친 내용을 아래와 같이 정리했습니다. 일부 항목은 더 명확하게 설명했으며, 중복된 내용은 제거했습니다. 😊
+
+---
+
+### Spring Security 및 OAuth2.0 클래스별 흐름 및 작동 원리
+
+#### 1. Spring Security 주요 클래스와 역할
+
+1. **SecurityConfig**
+   - **역할:**
+     - Spring Security의 전반적인 설정을 담당합니다.
+     - HTTP 요청별 보안 규칙, 인증/인가 처리 방식, OAuth2 설정 등을 정의합니다.
+     - CSRF 설정, 권한 설정, 로그인/로그아웃 설정 등을 정의합니다.
+   - **구성요소:**
+     - **HttpSecurity:** 각 요청에 대한 권한 설정.
+     - **PasswordEncoder:** 비밀번호 암호화를 위한 `BCryptPasswordEncoder` 설정.
+     - **CustomAuthenticationProvider:** 사용자 인증을 커스터마이징.
+     - **OAuth2 관련 핸들러 설정:**
+       - **CustomOAuth2UserService:** OAuth2 사용자 정보를 처리.
+       - **CustomOAuth2AuthenticationSuccessHandler:** 로그인 성공 후 로직 처리.
+
+2. **CustomAuthenticationProvider**
+   - **역할:** 사용자 인증을 처리하는 커스텀 인증 프로바이더.
+   - **주요 메서드:**
+     - `authenticate`: 사용자 이름과 비밀번호를 검증. 성공 시 `UsernamePasswordAuthenticationToken`을 반환.
+     - `supports`: 지원하는 인증 객체 타입을 지정.
+
+3. **CustomLoginFailureHandler**
+   - **역할:** 로그인 실패 시 처리하는 핸들러.
+   - **주요 메서드:**
+     - `onAuthenticationFailure`: 다양한 인증 예외 상황에 맞는 에러 메시지를 설정하고, 실패 시 특정 URL로 리다이렉트.
+
+4. **CustomLoginSuccessHandler**
+   - **역할:** 로그인 성공 시 처리하는 핸들러.
+   - **주요 메서드:**
+     - `onAuthenticationSuccess`: 로그인한 사용자 정보를 세션에 저장하고, 성공 후 사용자 권한(ROLE_USER, ROLE_ADMIN)에 따라 특정 URL로 리다이렉트.
+
+5. **CustomUserDetails**
+   - **역할:** Spring Security의 UserDetails 인터페이스를 구현하여 사용자 세부 정보를 캡슐화.
+   - **주요 필드 및 메서드:**
+     - `getPassword`, `getUsername`, `getAuthorities` 등.
+
+6. **CustomUserDetailsService**
+   - **역할:** 사용자 정보를 데이터베이스에서 조회하여 `UserDetails` 형태로 반환.
+   - **주요 메서드:**
+     - `loadUserByUsername`: 사용자 이름을 기반으로 사용자 정보를 조회.
+
+7. **LoginUser**
+   - **역할:** 세션 관련 중복 코드를 제거하기 위한 어노테이션.
+
+8. **LoginUserArgumentResolver**
+   - **역할:** `@LoginUser` 어노테이션이 붙은 파라미터를 처리하는 리졸버.
+   - **주요 메서드:**
+     - `supportsParameter`: `@LoginUser` 어노테이션과 파라미터 타입을 확인.
+     - `resolveArgument`: 세션에서 사용자 정보를 가져옴.
+
+9. **WebConfig**
+   - **역할:** Spring MVC에서 정적 리소스를 처리하고, `LoginUserArgumentResolver`를 추가하는 설정 클래스.
+
+#### 2. OAuth2 관련 클래스와 역할
+
+1. **OAuthAttributes**
+   - **역할:**
+     - `of()` 메서드를 통해 제공자별로 사용자 정보 매핑.
+     - 사용자 정보를 표준화된 형태로 변환.
+     - `toEntity()` 메서드를 통해 매핑된 사용자 정보를 엔티티로 변환 및 Role 설정.
+   - **동작:**
+     1. `of()` 메서드 호출.
+     2. 제공된 OAuth2 사용자 정보를 매핑.
+     3. `toEntity()` 메서드로 사용자 엔티티로 변환.
+
+2. **CustomOAuth2UserService**
+   - **역할:**
+     - OAuth2 로그인 시 사용자 정보를 처리.
+     - 새 사용자면 DB에 저장하고, 기존 사용자면 정보를 갱신.
+   - **동작:**
+     1. `loadUser(OAuth2UserRequest userRequest)` 호출.
+     2. 제공된 OAuth2User 정보를 가져옴.
+     3. 사용자 정보를 DB에 저장 또는 업데이트.
+
+3. **CustomOAuth2AuthenticationSuccessHandler**
+   - **역할:**
+     - OAuth2 인증 성공 후 사용자 처리.
+   - **동작:**
+     1. OAuth2 인증 성공 후 호출됨.
+     2. 사용자의 권한에 따라 다른 URL로 리다이렉션.
+
+---
+
+### 전체 동작 흐름
+
+1. **사용자 요청**
+   - 사용자가 로그인 페이지에서 사용자 이름과 비밀번호를 입력하고 로그인 요청을 보냅니다.
+
+2. **CustomAuthenticationProvider**
+   - `authenticate` 메서드를 통해 사용자 이름과 비밀번호를 검증합니다.
+   - 사용자 정보가 일치하면 `UsernamePasswordAuthenticationToken`을 반환하여 인증을 완료합니다.
+
+3. **인증 성공**
+   - `CustomLoginSuccessHandler`가 호출되어 로그인한 사용자 정보를 세션에 저장하고, 성공 후 특정 URL로 리다이렉트합니다.
+
+4. **인증 실패**
+   - `CustomLoginFailureHandler`가 호출되어 실패 이유에 따라 적절한 에러 메시지를 설정하고, 실패 후 특정 URL로 리다이렉트합니다.
+
+5. **CSRF 설정 및 OAuth2 로그인**
+   - `SecurityConfig`에서 CSRF 보호와 OAuth2 로그인 설정을 관리합니다.
+   - OAuth2 로그인 성공 시 `CustomOAuth2AuthenticationSuccessHandler`가 호출됩니다.
+
+6. **리소스 핸들링**
+   - `WebConfig`에서 정적 리소스 경로를 설정하고, `LoginUserArgumentResolver`를 추가하여 세션에서 사용자 정보를 가져옵니다.
+
+---
+
+### Security 및 OAuth2 플로우
+
+1. **Spring Security 인증 플로우**
+   ```plaintext
+   [Spring Security Filter Chain]  // Spring Security 필터 체인
+      |
+      v
+   [CustomAuthenticationProvider]  // 사용자 인증을 처리하는 커스텀 인증 프로바이더
+      |-- 사용자 ID, 비밀번호 검증
+      |-- 성공 시: Authentication 객체 생성
+      |-- 실패 시: 인증 예외 발생
+   [CustomUserDetailsService]  // 사용자 정보를 데이터베이스에서 조회하는 서비스
+      |
+      v
+   [CustomUserDetails]  // 사용자 세부 정보를 캡슐화한 클래스
+      |
+      v
+   [CustomLoginSuccessHandler]  // 로그인 성공 시 후속 처리 핸들러 (성공 시 리다이렉션)
+      |-- 사용자 권한 확인 및 리다이렉션
+      v
+   [CustomLoginFailureHandler]  // 로그인 실패 시 후속 처리 핸들러 (실패 시 특정 URL로 리다이렉트)
+   ```
+
+2. **OAuth2 인증 플로우**
+   ```plaintext
+   [User OAuth2 Login Request]  // 사용자 OAuth2 로그인 요청
+      |
+      v
+   [Spring Security Filter Chain]  // Spring Security에서 요청을 필터링
+      |
+      v
+   [OAuth2 Login Filter]  // OAuth2 로그인 필터가 요청을 처리
+      |
+      v
+   [CustomOAuth2UserService]  // 사용자 정보를 로드하는 서비스
+      |-- OAuth2 로그인 시 사용자 정보를 로드, 사용자 정보를 저장/업데이트 및 역할 설정
+      v
+   [OAuthAttributes]  // 사용자 속성을 매핑
+      |
+      v
+   [OAuth2AuthenticationToken]  // 인증 토큰이 생성, 인증 성공
+      |
+      v
+   [CustomOAuth2AuthenticationSuccessHandler]  // 로그인 성공 후 처리
+      |-- 권한 확인 및 리다이렉션
+      v
+   [Application Controller 처리]
+   ```
+
+3. **HTTP 요청에 따른 보안 흐름**
+   ```plaintext
+   [HTTP 요청 (예: /admin, /login)]
+      |
+      v
+   [SecurityFilterChain]
+      |
+      v
+   [HttpSecurity 설정 매핑]
+      |-- /admin → ROLE_ADMIN 권한 필요
+      |-- /user → ROLE_USER 권한 필요
+      v
+   [인가 확인]
+      |-- 인증된 사용자만 접근 가능
+      |-- 인증 실패 시: AccessDeniedHandler 호출
+   ```
+
+4. **권한 관리:**
+   - `/admin/**`: ROLE_ADMIN 권한만 접근 가능.
+   - `/user/**`: ROLE_USER, ROLE_ADMIN 모두 접근 가능.
+   - `/oauth2/**`: OAuth2 인증으로 처리.
+
+5. **예외 처리:**
+   - 인증 실패: `CustomLoginFailureHandler`에서 처리.
+   - 권한 부족: `AccessDeniedHandler`에서 처리.
+
+6. **비밀번호 보안:**
+   - 비밀번호는 `BCryptPasswordEncoder`로 암호화하여 저장.
+
+---
+
+
+
+
+
+
+
+
+
+
+
 ## 보안 설정
 
 ### 주요 클래스 및 역할
